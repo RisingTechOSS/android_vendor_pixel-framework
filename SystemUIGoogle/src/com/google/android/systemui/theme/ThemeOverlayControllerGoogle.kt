@@ -61,9 +61,7 @@ class ThemeOverlayControllerGoogle @Inject constructor(
     featureFlags: FeatureFlags,
     @Main resources: Resources,
     wakefulnessLifecycle: WakefulnessLifecycle,
-    tunerService: TunerService,
-    @param:Main private val mainResources: Resources,
-    private val systemPropertiesHelper: SystemPropertiesHelper
+    tunerService: TunerService
 ) : ThemeOverlayController(
     context,
     broadcastDispatcher,
@@ -84,38 +82,5 @@ class ThemeOverlayControllerGoogle @Inject constructor(
     wakefulnessLifecycle,
     tunerService
 ) {
-    init {
-        configurationController.addCallback(object :
-            ConfigurationController.ConfigurationListener {
-            override fun onThemeChanged() {
-                setBootColorSystemProps()
-            }
-        })
 
-        val bootColors = getBootColors()
-        for (i in bootColors.indices) {
-            Log.d("ThemeOverlayController", "Boot animation colors ${i + 1}: ${bootColors[i]}")
-        }
-    }
-
-    private fun setBootColorSystemProps() {
-        try {
-            val bootColors = getBootColors()
-            for (i in bootColors.indices) {
-                systemPropertiesHelper.set("persist.bootanim.color${i + 1}", bootColors[i])
-                Log.d("ThemeOverlayController", "Writing boot animation colors ${i + 1}: ${bootColors[i]}")
-            }
-        } catch (e: RuntimeException) {
-            Log.w("ThemeOverlayController", "Cannot set sysprop. Look for 'init' and 'dmesg' logs for more info.")
-        }
-    }
-
-    private fun getBootColors(): IntArray {
-        return intArrayOf(
-            mainResources.getColor(android.R.color.system_accent3_100),
-            mainResources.getColor(android.R.color.system_accent1_300),
-            mainResources.getColor(android.R.color.system_accent2_500),
-            mainResources.getColor(android.R.color.system_accent1_100)
-        )
-    }
 }
