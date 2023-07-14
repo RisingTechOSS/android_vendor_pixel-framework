@@ -30,7 +30,7 @@ public class ColumbusLowSensitivityPreferenceController extends ColumbusTogglePr
 
     @Override // com.android.settings.core.BasePreferenceController
     public int getAvailabilityStatus() {
-        if (SystemProperties.getBoolean("persist.columbus.use_ap_sensor", true)){
+        if (SystemProperties.getBoolean("persist.columbus.use_ap_sensor", false)){
             return UNSUPPORTED_ON_DEVICE;
         }
         return super.getAvailabilityStatus();

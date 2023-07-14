@@ -27,6 +27,6 @@ public class ColumbusLowSensitivityCategoryPreferenceController extends BasePref
 
     @Override
     public int getAvailabilityStatus() {
-        return SystemProperties.getBoolean("persist.columbus.use_ap_sensor", true) ? UNSUPPORTED_ON_DEVICE : AVAILABLE;
+        return SystemProperties.getBoolean("persist.columbus.use_ap_sensor", false) ? UNSUPPORTED_ON_DEVICE : AVAILABLE;
     }
 }
