@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Tiles native to Rising System UI. Order should match "quick_settings_tiles_default" -->
+    <string name="quick_settings_tiles_stock" translatable="false">
+        internet,wifi,cell,bt,flashlight,dnd,alarm,airplane,nfc,controls,wallet,rotation,screenshot,soundsearch,refresh_rate,battery,weather,reverse,cast,screenrecord,sound,volume_panel,mictoggle,cameratoggle,location,hotspot,inversion,saver,dark,work,night,reverse,reduce_brightness,qr_code_scanner,onehanded,color_correction,dream,font_scaling,ambient_display,aod,caffeine,heads_up,reading_mode,sync,profiles,usb_tether,vpn,glovemode,smartpixels,dataswitch
+    </string>
+
+    <!-- Icons that don't show in a collapsed non-keyguard statusbar -->
+    <string-array name="config_collapsed_statusbar_icon_blocklist" translatable="false">
+        <item>@*android:string/status_bar_call_strength</item>
+    </string-array>
+
+   <!-- Icons that don't show in a collapsed statusbar on keyguard -->
+    <string-array name="config_keyguard_statusbar_icon_blocklist" translatable="false">
+        <item>@*android:string/status_bar_call_strength</item>
+    </string-array>
+
+    <!-- Icons that are disabled by default on status bar tuner settings -->
+    <string-array name="config_statusBarIconsToExclude" translatable="false">
+        <item>@*android:string/status_bar_rotate</item>
+        <item>@*android:string/status_bar_headset</item>
+        <item>@*android:string/status_bar_call_strength</item>
+        <item>@*android:string/status_bar_volume</item>
+        <item>@*android:string/status_bar_alarm_clock</item>
+    </string-array>
+
+    <!-- Do not translate. Defines the slots for the right-hand side icons.  That is to say, the
+         icons in the status bar that are not notifications. -->
+    <string-array name="config_statusBarIcons">
+        <item><xliff:g id="id">@android/status_bar_no_calling</xliff:g></item>
+        <item><xliff:g id="id">@android/status_bar_call_strength</xliff:g></item>
+        <item><xliff:g id="id">@android/status_bar_alarm_clock</xliff:g></item>
+        <item><xliff:g id="id">@android/status_bar_rotate</xliff:g></item>
+        <item><xliff:g id="id">@android/status_bar_headset</xliff:g></item>
+        <item><xliff:g id="id">@android/status_bar_data_saver</xliff:g></item>
+        <item><xliff:g id="id">@android/status_bar_ime</xliff:g></item>
+        <item><xliff:g id="id">@android/status_bar_sync_failing</xliff:g></item>
+        <item><xliff:g id="id">@android/status_bar_sync_active</xliff:g></item>
+        <item><xliff:g id="id">@android/status_bar_nfc</xliff:g></item>
+        <item><xliff:g id="id">@android/status_bar_tty</xliff:g></item>
+        <item><xliff:g id="id">@android/status_bar_speakerphone</xliff:g></item>
+        <item><xliff:g id="id">@android/status_bar_cdma_eri</xliff:g></item>
+        <item><xliff:g id="id">@android/status_bar_data_connection</xliff:g></item>
+        <item><xliff:g id="id">@android/status_bar_phone_evdo_signal</xliff:g></item>
+        <item><xliff:g id="id">@android/status_bar_phone_signal</xliff:g></item>
+        <item><xliff:g id="id">@android/status_bar_secure</xliff:g></item>
+        <item><xliff:g id="id">@android/status_bar_managed_profile</xliff:g></item>
+        <item><xliff:g id="id">@android/status_bar_cast</xliff:g></item>
+        <item><xliff:g id="id">@android/status_bar_screen_record</xliff:g></item>
+        <item><xliff:g id="id">@android/status_bar_vpn</xliff:g></item>
+        <item><xliff:g id="id">@android/status_bar_camera</xliff:g></item>
+        <item><xliff:g id="id">@android/status_bar_microphone</xliff:g></item>
+        <item><xliff:g id="id">@android/status_bar_location</xliff:g></item>
+        <item><xliff:g id="id">@android/status_bar_mute</xliff:g></item>
+        <item><xliff:g id="id">@android/status_bar_volume</xliff:g></item>
+        <item><xliff:g id="id">@android/status_bar_zen</xliff:g></item>
+        <item><xliff:g id="id">@android/status_bar_ethernet</xliff:g></item>
+        <item><xliff:g id="id">@android/status_bar_bluetooth</xliff:g></item>
+        <item><xliff:g id="id">@android/status_bar_wifi</xliff:g></item>
+        <item><xliff:g id="id">@android/status_bar_hotspot</xliff:g></item>
+        <item><xliff:g id="id">@android/status_bar_mobile</xliff:g></item>
+        <item><xliff:g id="id">@android/status_bar_airplane</xliff:g></item>
+        <item><xliff:g id="id">@android/status_bar_battery</xliff:g></item>
+        <item><xliff:g id="id">@android/status_bar_sensors_off</xliff:g></item>
+    </string-array>
+
+</resources>
