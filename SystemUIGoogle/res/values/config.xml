@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Tiles native to Rising System UI. Order should match "quick_settings_tiles_default" -->
     <string name="quick_settings_tiles_stock" translatable="false">
-        internet,wifi,cell,bt,flashlight,dnd,alarm,airplane,nfc,controls,wallet,rotation,screenshot,soundsearch,refresh_rate,battery,weather,reverse,cast,screenrecord,sound,volume_panel,mictoggle,cameratoggle,location,hotspot,inversion,saver,dark,work,night,reverse,reduce_brightness,qr_code_scanner,onehanded,color_correction,dream,font_scaling,ambient_display,aod,caffeine,heads_up,reading_mode,sync,profiles,usb_tether,vpn,glovemode,smartpixels,dataswitch
+        internet,wifi,cell,bt,flashlight,dnd,alarm,airplane,nfc,controls,wallet,rotation,screenshot,soundsearch,dataswitch,refresh_rate,battery,weather,reverse,cast,screenrecord,sound,volume_panel,mictoggle,cameratoggle,location,hotspot,inversion,saver,dark,work,night,reverse,reduce_brightness,qr_code_scanner,onehanded,color_correction,dream,font_scaling,ambient_display,aod,caffeine,heads_up,reading_mode,sync,profiles,usb_tether,vpn,glovemode,smartpixels,dataswitch
     </string>
 
     <!-- Icons that don't show in a collapsed non-keyguard statusbar -->
