@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <plurals name="smartspace_hours">
+        <item quantity="other">‏%d שעות</item>
+        <item quantity="one">‏%d שעות</item>
+        <item quantity="two">‏שעתיים (%d)</item>
+    </plurals>
+    <plurals name="smartspace_minutes">
+        <item quantity="other">‏%d דקות</item>
+        <item quantity="one">‏%d דקות</item>
+        <item quantity="two">‏%d דקות</item>
+    </plurals>
+</resources>

@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <integer name="biometric_dialog_text_gravity">1</integer>
+    <integer name="columbus_default_sensitivity_percent">77</integer>
+    <integer name="columbus_low_sensitivity_percent">0</integer>
+    <integer name="config_dock_animation_delay_ms">0</integer>
+    <integer name="config_dock_setup_delay_ms">1000</integer>
+    <integer name="low_light_clock_alpha_animation_duration_ms">250</integer>
+    <integer name="low_light_clock_alpha_animation_in_start_delay_ms">233</integer>
+    <integer name="low_light_clock_charging_text_font_weight">500</integer>
+    <integer name="low_light_clock_translate_animation_duration_ms">1167</integer>
+</resources>

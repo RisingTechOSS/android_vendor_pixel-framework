@@ -1,0 +1,55 @@
+android_library {
+    name: "SettingsGoogle-core",
+    platform_apis: true,
+
+    srcs: ["src/**/*.java"],
+    static_libs: [
+        "Settings-core",
+        "android.hidl.base-V1.0-java",
+        "android.frameworks.stats-V1-java",
+        "vendor-pixelatoms-java",
+        "SettingsGoogle-lib",
+        "google-battery",
+    ],
+    resource_dirs: [
+        "res",
+    ],
+    manifest: ":Settings_manifest",
+}
+
+android_app {
+    name: "SettingsGoogle",
+    defaults: ["platform_app_defaults"],
+    platform_apis: true,
+    certificate: "platform",
+    system_ext_specific: true,
+    privileged: true,
+    required: [
+        "privapp_whitelist_com.android.settings",
+        "settings-platform-compat-config",
+    ],
+    static_libs: ["SettingsGoogle-core"],
+    uses_libs: ["org.apache.http.legacy"],
+    optimize: {
+        proguard_flags_files: [
+            ":Settings_proguard_flags",
+            "proguard.flags",
+        ],
+    },
+    overrides: [
+        "Settings",
+    ],
+    manifest: ":Settings_manifest",
+    additional_manifests: ["AndroidManifest.xml"],
+}
+
+java_import  {
+    name: "SettingsGoogle-lib",
+    sdk_version: "current",
+    jars: ["libs/SettingsGoogle-lib.jar"],
+}
+
+filegroup {
+    name: "SettingsGoogle_manifest",
+    srcs: ["AndroidManifest.xml"],
+}
