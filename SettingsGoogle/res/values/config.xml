@@ -1,6 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-
-    <!-- Fully-qualified class name for the implementation of the FeatureFactory to be instantiated. -->
-    <string name="config_featureFactory" translatable="false">com.google.android.settings.overlay.FeatureFactoryImplGoogle</string>
-</resources>
