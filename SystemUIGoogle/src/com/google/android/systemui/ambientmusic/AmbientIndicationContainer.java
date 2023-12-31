@@ -369,10 +369,10 @@ public class AmbientIndicationContainer extends AutoReinflateContainer implement
         int i;
         int i2;
         int i3;
-        TextView textView2 = mTextView;
-        if (textView2 == null) {
+        if (mTextView == null || mIconView == null) {
             return;
         }
+        TextView textView2 = mTextView;
         int i4 = mIndicationTextMode;
         mIndicationTextMode = 1;
         CharSequence charSequence2 = mAmbientMusicText;
