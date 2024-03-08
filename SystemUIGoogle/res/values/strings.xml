@@ -105,7 +105,6 @@ The face data used by face unlock will be permanently and securely deleted. Afte
     <string name="stylus_stop_charging_text"/>
     <string name="stylus_system_update_notification_text"/>
     <string name="stylus_system_update_notification_title"/>
-    <string name="themepicker_overlayable_package">com.google.android.apps.wallpaper</string>
     <string name="thermal_shutdown_dialog_help_url">https://support.google.com/pixelphone?p=overheat_shutdown</string>
     <string name="too_hot_label">Pixel too hot</string>
     <string name="url_menu_copy">Copy</string>
