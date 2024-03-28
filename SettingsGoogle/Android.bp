@@ -9,7 +9,6 @@ android_library {
         "android.frameworks.stats-V1-java",
         "vendor-pixelatoms-java",
         "SettingsGoogle-lib",
-        "google-battery",
     ],
     resource_dirs: [
         "res",
