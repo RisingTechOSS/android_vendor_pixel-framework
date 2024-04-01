@@ -24,6 +24,7 @@
     <item type="id" name="debug_container"/>
     <item type="id" name="dock_promo"/>
     <item type="id" name="docked_top_icon"/>
+    <item type="id" name="dnd_icon"/>
     <item type="id" name="dream_status_bar_item_cast_name"/>
     <item type="id" name="dreamliner_arrow"/>
     <item type="id" name="dreamliner_gear"/>

@@ -22,7 +22,7 @@ import com.android.systemui.LatencyTester
 import com.android.systemui.ScreenDecorations
 import com.android.systemui.SliceBroadcastRelayHandler
 import com.android.systemui.accessibility.SystemActions
-import com.android.systemui.accessibility.WindowMagnification
+import com.android.systemui.accessibility.Magnification
 import com.android.systemui.biometrics.AuthController
 import com.android.systemui.biometrics.BiometricNotificationService
 import com.android.systemui.clipboardoverlay.ClipboardListener
@@ -49,7 +49,6 @@ import com.android.systemui.settings.dagger.MultiUserUtilsModule
 import com.android.systemui.shortcut.ShortcutKeyDispatcher
 import com.android.systemui.statusbar.notification.InstantAppNotifier
 import com.android.systemui.statusbar.phone.KeyguardLiftController
-import com.android.systemui.statusbar.phone.LockscreenWallpaper
 import com.android.systemui.statusbar.phone.ScrimController
 import com.android.systemui.statusbar.phone.StatusBarHeadsUpChangeListener
 import com.android.systemui.stylus.StylusUsiPowerStartable
@@ -227,11 +226,11 @@ abstract class SystemUIGoogleCoreStartableModule {
     @ClassKey(VolumeUI::class)
     abstract fun bindVolumeUI(sysui: VolumeUI): CoreStartable
 
-    /** Inject into WindowMagnification.  */
+    /** Inject into Magnification.  */
     @Binds
     @IntoMap
-    @ClassKey(WindowMagnification::class)
-    abstract fun bindWindowMagnification(sysui: WindowMagnification): CoreStartable
+    @ClassKey(Magnification::class)
+    abstract fun Magnification(sysui: Magnification): CoreStartable
 
     /** Inject into WMShell.  */
     @Binds
@@ -314,11 +313,6 @@ abstract class SystemUIGoogleCoreStartableModule {
     @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
     @ClassKey(KeyguardViewConfigurator::class)
     abstract fun bindKeyguardViewConfigurator(impl: KeyguardViewConfigurator): CoreStartable
-
-    @Binds
-    @IntoMap
-    @ClassKey(LockscreenWallpaper::class)
-    abstract fun bindLockscreenWallpaper(impl: LockscreenWallpaper): CoreStartable
 
     @Binds
     @IntoMap

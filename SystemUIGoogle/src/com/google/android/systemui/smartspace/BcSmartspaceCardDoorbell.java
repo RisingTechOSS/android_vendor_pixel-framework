@@ -25,7 +25,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import com.android.launcher3.icons.RoundDrawableWrapper;
-import com.android.systemui.R;
+import com.android.systemui.res.R;
 import com.android.systemui.plugins.BcSmartspaceDataPlugin;
 import com.google.android.systemui.smartspace.logging.BcSmartspaceCardLoggingInfo;
 import java.io.IOException;

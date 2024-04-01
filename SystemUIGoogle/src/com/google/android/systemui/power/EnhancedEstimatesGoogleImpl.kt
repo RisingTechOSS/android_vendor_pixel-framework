@@ -37,9 +37,8 @@ class EnhancedEstimatesGoogleImpl @Inject constructor(private val mContext: Cont
 
     override fun isHybridNotificationEnabled(): Boolean {
         return try {
-            mContext.packageManager.getPackageInfo("com.google.android.apps.turbo", 512).applicationInfo.enabled &&
-                    updateFlags()
-            mParser.getBoolean("hybrid_enabled", true)
+            val packageInfo = mContext.packageManager.getPackageInfo("com.google.android.apps.turbo", 512)
+            packageInfo.applicationInfo?.enabled == true && updateFlags() && mParser.getBoolean("hybrid_enabled", true)
         } catch (e: PackageManager.NameNotFoundException) {
             false
         }

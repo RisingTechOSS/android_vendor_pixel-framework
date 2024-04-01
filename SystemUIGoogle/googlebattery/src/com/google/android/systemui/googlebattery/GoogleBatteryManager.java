@@ -34,7 +34,9 @@ public final class GoogleBatteryManager {
                 allowBlocking.linkToDeath(deathRecipient, 0);
             }
             return asInterface;
-        } catch (RemoteException | SecurityException | NoSuchElementException e) {
+
+        } catch (Exception e) {
+            Log.e("GoogleBatteryManager", "Error initializing HAL interface", e);
             return null;
         }
     }

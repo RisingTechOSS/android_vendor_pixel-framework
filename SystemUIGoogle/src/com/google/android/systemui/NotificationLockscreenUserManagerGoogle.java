@@ -24,9 +24,11 @@ import android.os.UserManager;
 import com.android.internal.widget.LockPatternUtils;
 import com.android.systemui.broadcast.BroadcastDispatcher;
 import com.android.systemui.dagger.SysUISingleton;
+import com.android.systemui.dagger.qualifiers.Background;
 import com.android.systemui.dagger.qualifiers.Main;
 import com.android.systemui.dump.DumpManager;
 import com.android.systemui.flags.FeatureFlags;
+import com.android.systemui.flags.FeatureFlagsClassic;
 import com.android.systemui.plugins.statusbar.StatusBarStateController;
 import com.android.systemui.recents.OverviewProxyService;
 import com.android.systemui.statusbar.NotificationClickNotifier;
@@ -41,6 +43,7 @@ import com.android.systemui.util.settings.SecureSettings;
 import com.google.android.systemui.smartspace.SmartSpaceController;
 import dagger.Lazy;
 import javax.inject.Inject;
+import java.util.concurrent.Executor;
 
 @SysUISingleton
 public final class NotificationLockscreenUserManagerGoogle extends NotificationLockscreenUserManagerImpl {
@@ -50,18 +53,31 @@ public final class NotificationLockscreenUserManagerGoogle extends NotificationL
     public final SmartSpaceController mSmartSpaceController;
 
     @Inject
-    public NotificationLockscreenUserManagerGoogle(Context context, BroadcastDispatcher broadcastDispatcher,
-        DevicePolicyManager devicePolicyManager, UserManager userManager, UserTracker userTracker,
-        Lazy<NotificationVisibilityProvider> visibilityProviderLazy,
-        Lazy<CommonNotifCollection> commonNotifCollectionLazy, NotificationClickNotifier clickNotifier,
-        Lazy<OverviewProxyService> overviewProxyServiceLazy, KeyguardManager keyguardManager,
-        StatusBarStateController statusBarStateController, @Main Handler mainHandler,
-        DeviceProvisionedController deviceProvisionedController, KeyguardStateController keyguardStateController,
-        Lazy<KeyguardBypassController> keyguardBypassController, SmartSpaceController smartSpaceController,
-        SecureSettings secureSettings, DumpManager dumpManager, LockPatternUtils lockPatternUtils, FeatureFlags featureFlags) {
+    public NotificationLockscreenUserManagerGoogle(Context context,
+            BroadcastDispatcher broadcastDispatcher,
+            DevicePolicyManager devicePolicyManager,
+            UserManager userManager,
+            UserTracker userTracker,
+            Lazy<NotificationVisibilityProvider> visibilityProviderLazy,
+            Lazy<CommonNotifCollection> commonNotifCollectionLazy,
+            NotificationClickNotifier clickNotifier,
+            Lazy<OverviewProxyService> overviewProxyServiceLazy,
+            KeyguardManager keyguardManager,
+            StatusBarStateController statusBarStateController,
+            @Main Handler mainHandler,
+            @Background Handler backgroundHandler,
+            @Background Executor backgroundExecutor,
+            DeviceProvisionedController deviceProvisionedController,
+            KeyguardStateController keyguardStateController,
+            SecureSettings secureSettings,
+            DumpManager dumpManager,
+            LockPatternUtils lockPatternUtils,
+            FeatureFlagsClassic featureFlags,
+            Lazy<KeyguardBypassController> keyguardBypassController,
+            SmartSpaceController smartSpaceController) {
         super(context, broadcastDispatcher, devicePolicyManager, userManager, userTracker, visibilityProviderLazy,
             commonNotifCollectionLazy, clickNotifier, overviewProxyServiceLazy, keyguardManager, statusBarStateController,
-            mainHandler, deviceProvisionedController, keyguardStateController, secureSettings, dumpManager, lockPatternUtils, featureFlags);
+            mainHandler, backgroundHandler, backgroundExecutor, deviceProvisionedController, keyguardStateController, secureSettings, dumpManager, lockPatternUtils, featureFlags);
         KeyguardStateController.Callback callback = new KeyguardStateController.Callback() {
             public void onKeyguardShowingChanged() {
                 NotificationLockscreenUserManagerGoogle.this.updateSmartSpaceVisibilitySettings();
@@ -73,13 +89,12 @@ public final class NotificationLockscreenUserManagerGoogle extends NotificationL
         this.mKeyguardStateController = keyguardStateController;
         this.mKeyguardStateController.addCallback(callback);
     }
-
     public void updateSmartSpaceVisibilitySettings() {
         boolean hideNotifs = false;
         boolean hideSensitive = !userAllowsPrivateNotificationsInPublic(this.mCurrentUserId) && (isAnyProfilePublicMode() || !this.mKeyguardStateController.isShowing());
         boolean hideWork = !allowsManagedPrivateNotificationsInPublic();
         if (!((KeyguardBypassController) this.mKeyguardBypassControllerLazy.get()).getBypassEnabled()) {
-            if (hideWork && (isAnyManagedProfilePublicMode() || !this.mKeyguardStateController.isShowing())) {
+            if (hideWork && (isAnyProfilePublicMode() || !this.mKeyguardStateController.isShowing())) {
                 hideNotifs = true;
             }
             hideWork = hideNotifs;

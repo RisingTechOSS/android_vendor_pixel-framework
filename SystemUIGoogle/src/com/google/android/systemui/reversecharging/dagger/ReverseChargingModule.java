@@ -21,7 +21,7 @@ import android.hardware.usb.UsbManager;
 import android.os.IThermalService;
 import android.os.ServiceManager;
 
-import com.android.systemui.R;
+import com.android.systemui.res.R;
 import com.android.systemui.broadcast.BroadcastDispatcher;
 import com.android.systemui.dagger.SysUISingleton;
 import com.android.systemui.dagger.qualifiers.Main;

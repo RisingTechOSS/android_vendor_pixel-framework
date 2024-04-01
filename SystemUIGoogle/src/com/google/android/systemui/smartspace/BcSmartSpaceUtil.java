@@ -16,7 +16,7 @@ import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.util.Log;
 import android.view.View;
-import com.android.systemui.R;
+import com.android.systemui.res.R;
 import com.android.systemui.plugins.BcSmartspaceDataPlugin;
 import com.android.systemui.plugins.FalsingManager;
 import com.google.android.systemui.smartspace.logging.BcSmartspaceCardLogger;

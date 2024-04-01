@@ -28,7 +28,6 @@ import androidx.annotation.Nullable;
 
 import com.android.systemui.qs.QsEventLogger;
 import com.android.keyguard.KeyguardViewController;
-import com.android.systemui.assist.AssistManager;
 import com.android.systemui.broadcast.BroadcastDispatcher;
 import com.android.systemui.controls.controller.ControlsTileResourceConfiguration;
 import com.android.systemui.dagger.SysUISingleton;
@@ -63,15 +62,13 @@ import com.android.systemui.statusbar.KeyguardIndicationController;
 import com.android.systemui.statusbar.notification.collection.provider.VisualStabilityProvider;
 import com.android.systemui.statusbar.notification.collection.render.GroupMembershipManager;
 import com.android.systemui.statusbar.phone.DozeServiceHost;
-import com.android.systemui.statusbar.phone.HeadsUpManagerPhone;
 import com.android.systemui.statusbar.phone.KeyguardBypassController;
 import com.android.systemui.statusbar.phone.StatusBarKeyguardViewManager;
 import com.android.systemui.statusbar.policy.AccessibilityManagerWrapper;
+import com.android.systemui.statusbar.policy.AospPolicyModule;
 import com.android.systemui.statusbar.policy.ConfigurationController;
 import com.android.systemui.statusbar.policy.DeviceProvisionedController;
 import com.android.systemui.statusbar.policy.DeviceProvisionedControllerImpl;
-import com.android.systemui.statusbar.policy.HeadsUpManager;
-import com.android.systemui.statusbar.policy.HeadsUpManagerLogger;
 import com.android.systemui.statusbar.policy.IndividualSensorPrivacyController;
 import com.android.systemui.statusbar.policy.IndividualSensorPrivacyControllerImpl;
 import com.android.systemui.statusbar.policy.SensorPrivacyController;
@@ -80,13 +77,18 @@ import com.android.systemui.volume.dagger.VolumeModule;
 import com.android.systemui.rotationlock.RotationLockModule;
 import com.android.systemui.statusbar.policy.AospPolicyModule;
 
+import com.android.systemui.battery.BatterySaverModule;
+import com.android.systemui.settings.dagger.MultiUserUtilsModule;
+import com.android.systemui.statusbar.phone.fragment.CollapsedStatusBarFragmentStartableModule;
+import com.android.systemui.shade.ShadeModule;
+import com.android.systemui.scene.SceneContainerFrameworkModule;
+import com.android.systemui.navigationbar.NavigationBarControllerModule;
+import com.android.systemui.statusbar.phone.HeadsUpModule;
+import com.android.systemui.wallpapers.dagger.WallpaperModule;
+import com.android.systemui.statusbar.KeyboardShortcutsModule;
+
 import com.google.android.systemui.NotificationLockscreenUserManagerGoogle;
-import com.google.android.systemui.assist.AssistManagerGoogle;
-import com.google.android.systemui.assist.dagger.AssistModule;
-import com.google.android.systemui.columbus.dagger.ColumbusModule;
 import com.google.android.systemui.controls.GoogleControlsTileResourceConfigurationImpl;
-import com.google.android.systemui.dreamliner.DockObserver;
-import com.google.android.systemui.dreamliner.dagger.DreamlinerModule;
 import com.google.android.systemui.power.dagger.PowerModuleGoogle;
 import com.google.android.systemui.qs.dagger.QSModuleGoogle;
 import com.google.android.systemui.qs.tileimpl.QSFactoryImplGoogle;
@@ -109,24 +111,29 @@ import dagger.Provides;
 import dagger.Lazy;
 
 @Module(includes = {
+        CollapsedStatusBarFragmentStartableModule.class,
         GestureModule.class,
+        HeadsUpModule.class,
         MediaModule.class,
+        MultiUserUtilsModule.class,
+        NavigationBarControllerModule.class,
+        ShadeModule.class,
+        ReferenceScreenshotModule.class,
+        RotationLockModule.class,
+        SceneContainerFrameworkModule.class,
+        VolumeModule.class,
+        WallpaperModule.class,
+        KeyboardShortcutsModule.class,
         GoogleQSModule.class,
         PowerModuleGoogle.class,
         QSModuleGoogle.class,
-        ReferenceScreenshotModule.class,
         StartCentralSurfacesGoogleModule.class,
-        VolumeModule.class,
         SmartspaceGoogleModule.class,
-        DreamlinerModule.class,
         ReverseChargingModule.class,
-        AssistModule.class,
-        ColumbusModule.class,
-        StatusBarEventsModule.class,
         SystemUIGooglePolicyModule.class,
-        RotationLockModule.class,
         LineageModule.class
 })
+
 public abstract class SystemUIGoogleModule {
 
     @SysUISingleton
@@ -166,38 +173,6 @@ public abstract class SystemUIGoogleModule {
         return true;
     }
 
-    @SysUISingleton
-    @Provides
-    static HeadsUpManagerPhone provideHeadsUpManagerPhone(
-            Context context,
-            HeadsUpManagerLogger headsUpManagerLogger,
-            StatusBarStateController statusBarStateController,
-            KeyguardBypassController bypassController,
-            GroupMembershipManager groupManager,
-            VisualStabilityProvider visualStabilityProvider,
-            ConfigurationController configurationController,
-            @Main Handler handler,
-            AccessibilityManagerWrapper accessibilityManagerWrapper,
-            QsEventLogger uiEventLogger,
-            ShadeExpansionStateManager shadeExpansionStateManager) {
-        return new HeadsUpManagerPhone(
-                context,
-                headsUpManagerLogger,
-                statusBarStateController,
-                bypassController,
-                groupManager,
-                visualStabilityProvider,
-                configurationController,
-                handler,
-                accessibilityManagerWrapper,
-                uiEventLogger,
-                shadeExpansionStateManager
-        );
-    }
-
-    @Binds
-    abstract HeadsUpManager bindHeadsUpManagerPhone(HeadsUpManagerPhone headsUpManagerPhone);
-
     @Provides
     @SysUISingleton
     static Recents provideRecents(Context context, RecentsImplementation recentsImplementation,
@@ -228,16 +203,12 @@ public abstract class SystemUIGoogleModule {
     abstract KeyguardIndicationController bindKeyguardIndicationControllerGoogle(KeyguardIndicationControllerGoogle keyguardIndicationControllerGoogle);
 
     @Binds
-    abstract DockManager bindDockManager(DockObserver dockObserver);
+    abstract DockManager bindDockManager(DockManagerImpl dockManager);
 
     /** */
     @Binds
     @SysUISingleton
     public abstract QSFactory bindQSFactoryGoogle(QSFactoryImplGoogle qsFactoryImpl);
-
-    @Binds
-    @SysUISingleton
-    abstract AssistManager bindAssistManagerGoogle(AssistManagerGoogle assistManager);
 
     @Binds
     abstract ControlsTileResourceConfiguration bindControlsTileResourceConfiguration(GoogleControlsTileResourceConfigurationImpl configuration);

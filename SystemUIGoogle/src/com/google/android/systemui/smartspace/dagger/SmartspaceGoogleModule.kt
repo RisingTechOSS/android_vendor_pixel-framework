@@ -21,7 +21,6 @@ import com.android.systemui.smartspace.SmartspaceTargetFilter
 import com.android.systemui.smartspace.dagger.SmartspaceModule.Companion.DREAM_SMARTSPACE_DATA_PLUGIN
 import com.android.systemui.smartspace.dagger.SmartspaceModule.Companion.DREAM_SMARTSPACE_TARGET_FILTER
 import com.google.android.systemui.smartspace.*
-import com.google.android.systemui.smartspace.filters.DreamTargetFilter
 import dagger.Binds
 import dagger.Module
 import javax.inject.Named
@@ -33,10 +32,4 @@ abstract class SmartspaceGoogleModule {
     abstract fun bindsDreamBcSmartspaceDataPlugin(
         plugin: BcSmartspaceDataProvider
     ): BcSmartspaceDataPlugin
-
-    @Binds
-    @Named(DREAM_SMARTSPACE_TARGET_FILTER)
-    abstract fun bindsDreamSmartspaceTargetFilter(
-        filter: DreamTargetFilter
-    ): SmartspaceTargetFilter
 }

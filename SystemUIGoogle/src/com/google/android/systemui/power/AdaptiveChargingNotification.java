@@ -25,7 +25,7 @@ import android.os.Looper;
 import android.os.UserHandle;
 import androidx.core.app.NotificationCompat;
 import com.android.internal.annotations.VisibleForTesting;
-import com.android.systemui.R;
+import com.android.systemui.res.R;
 import com.android.systemui.util.NotificationChannels;
 import com.google.android.systemui.googlebattery.AdaptiveChargingManager;
 import com.google.android.systemui.power.AdaptiveChargingNotification;

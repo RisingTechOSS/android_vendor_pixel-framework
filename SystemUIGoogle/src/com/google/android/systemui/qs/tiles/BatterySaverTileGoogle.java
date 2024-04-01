@@ -21,7 +21,7 @@ import android.os.Looper;
 import com.android.internal.logging.MetricsLogger;
 import com.android.systemui.dagger.qualifiers.Background;
 import com.android.systemui.dagger.qualifiers.Main;
-import com.android.systemui.R;
+import com.android.systemui.res.R;
 import com.android.systemui.qs.QsEventLogger;
 import com.android.systemui.qs.QSHost;
 import com.android.systemui.qs.logging.QSLogger;

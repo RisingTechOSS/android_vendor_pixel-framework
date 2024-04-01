@@ -9,7 +9,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.android.systemui.R;
+import com.android.systemui.res.R;
 import com.android.systemui.plugins.BcSmartspaceDataPlugin;
 import com.google.android.systemui.smartspace.logging.BcSmartspaceCardLoggingInfo;
 import java.util.Locale;

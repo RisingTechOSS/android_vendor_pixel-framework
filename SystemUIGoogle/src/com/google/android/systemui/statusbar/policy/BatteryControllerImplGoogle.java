@@ -32,6 +32,7 @@ import com.android.systemui.dump.DumpManager;
 import com.android.systemui.power.EnhancedEstimates;
 import com.android.systemui.settings.UserContentResolverProvider;
 import com.android.systemui.statusbar.policy.BatteryController;
+import com.android.systemui.statusbar.policy.BatteryControllerLogger;
 import com.android.systemui.statusbar.policy.BatteryControllerImpl;
 import com.google.android.systemui.reversecharging.ReverseChargingController;
 import com.google.android.systemui.reversecharging.ReverseChargingChangeCallback;
@@ -50,8 +51,8 @@ public class BatteryControllerImplGoogle extends BatteryControllerImpl implement
     private boolean mReverse;
     private int mRtxLevel;
 
-    public BatteryControllerImplGoogle(Context context, EnhancedEstimates enhancedEstimates, PowerManager powerManager, BroadcastDispatcher broadcastDispatcher, DemoModeController demoModeController, DumpManager dumpManager, Handler handler, Handler handler2, UserContentResolverProvider userContentResolverProvider, ReverseChargingController reverseChargingController) {
-        super(context, enhancedEstimates, powerManager, broadcastDispatcher, demoModeController, dumpManager, handler, handler2);
+    public BatteryControllerImplGoogle(Context context, EnhancedEstimates enhancedEstimates, PowerManager powerManager, BroadcastDispatcher broadcastDispatcher, DemoModeController demoModeController, DumpManager dumpManager, BatteryControllerLogger logger,Handler handler, Handler handler2, UserContentResolverProvider userContentResolverProvider, ReverseChargingController reverseChargingController) {
+        super(context, enhancedEstimates, powerManager, broadcastDispatcher, demoModeController, dumpManager, logger, handler, handler2);
         mReverseChargingController = reverseChargingController;
         mContentResolverProvider = userContentResolverProvider;
         mContentObserver = new ContentObserver(handler2) {

@@ -19,7 +19,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewpager.widget.PagerAdapter;
 import com.android.internal.graphics.ColorUtils;
 import com.android.launcher3.icons.GraphicsUtils;
-import com.android.systemui.R;
+import com.android.systemui.res.R;
 import com.android.systemui.plugins.BcSmartspaceDataPlugin;
 import com.google.android.systemui.smartspace.logging.BcSmartspaceCardLoggerUtil;
 import com.google.android.systemui.smartspace.logging.BcSmartspaceCardLoggingInfo;

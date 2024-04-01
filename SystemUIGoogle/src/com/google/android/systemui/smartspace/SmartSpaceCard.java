@@ -24,7 +24,7 @@ import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 import android.util.Log;
 import androidx.annotation.NonNull;
-import com.android.systemui.R;
+import com.android.systemui.res.R;
 import com.android.systemui.smartspace.nano.SmartspaceProto;
 
 public final class SmartSpaceCard {

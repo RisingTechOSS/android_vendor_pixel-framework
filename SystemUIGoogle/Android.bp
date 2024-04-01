@@ -23,18 +23,14 @@ android_library {
         "vendor-pixelatoms-java",
         "smartspace-proto-java",
         "guava",
-        "matchmaker-lib",
-        "touchcontext-lib",
         "googlebattery-lib",
-        "nga-lib",
-        "columbus-lib",
         "google-battery",
         "vendor.google.google_battery-V1-java",
     ],
     manifest: "AndroidManifest.xml",
 
     javacflags: ["-Adagger.fastInit=enabled"],
-    kotlincflags: ["-Xjvm-default=enable"],
+    kotlincflags: ["-Xjvm-default=all"],
 
     plugins: ["dagger2-compiler"],
     lint: {
@@ -44,7 +40,9 @@ android_library {
 
 android_app {
     name: "SystemUIGoogle",
-    defaults: ["platform_app_defaults"],
+    defaults: [
+        "platform_app_defaults",
+    ],
     static_libs: [
         "SystemUIGoogle-core",
     ],
@@ -66,8 +64,12 @@ android_app {
         proguard_flags_files: ["proguard.flags"],
     },
 
+    libs: [
+        "ims-common",
+    ],
+
     javacflags: ["-Adagger.fastInit=enabled"],
-    kotlincflags: ["-Xjvm-default=enable"],
+    kotlincflags: ["-Xjvm-default=all"],
 
     dxflags: ["--multi-dex"],
     required: [
@@ -76,4 +78,18 @@ android_app {
     overrides: [
         "SystemUI",
     ],
+}
+
+java_library {
+    name: "google-battery",
+    srcs: ["googlebattery/src/**/*.java"],
+    static_libs: [
+        "vendor.google.google_battery-V1-java",
+    ],
+}
+
+java_import  {
+    name: "googlebattery-lib",
+    sdk_version: "current",
+    jars: ["libs/googlebattery.jar"],
 }

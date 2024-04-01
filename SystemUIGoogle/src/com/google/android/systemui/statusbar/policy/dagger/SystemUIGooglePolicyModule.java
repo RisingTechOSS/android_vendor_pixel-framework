@@ -29,6 +29,7 @@ import com.android.systemui.dump.DumpManager;
 import com.android.systemui.power.EnhancedEstimates;
 import com.android.systemui.settings.UserContentResolverProvider;
 import com.android.systemui.statusbar.policy.BatteryController;
+import com.android.systemui.statusbar.policy.BatteryControllerLogger;
 
 import com.google.android.systemui.statusbar.policy.BatteryControllerImplGoogle;
 import com.google.android.systemui.reversecharging.ReverseChargingController;
@@ -47,6 +48,7 @@ public class SystemUIGooglePolicyModule {
             BroadcastDispatcher broadcastDispatcher,
             DemoModeController demoModeController,
             DumpManager dumpManager,
+            BatteryControllerLogger logger,
             @Main Handler mainHandler,
             @Background Handler bgHandler,
             UserContentResolverProvider userContentResolverProvider,
@@ -58,6 +60,7 @@ public class SystemUIGooglePolicyModule {
                 broadcastDispatcher,
                 demoModeController,
                 dumpManager,
+                logger,
                 mainHandler,
                 bgHandler,
                 userContentResolverProvider,

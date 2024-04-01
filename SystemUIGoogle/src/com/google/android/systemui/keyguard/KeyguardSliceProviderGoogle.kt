@@ -29,7 +29,7 @@ import androidx.slice.Slice
 import androidx.slice.builders.ListBuilder
 import androidx.slice.builders.ListBuilder.*
 import androidx.slice.builders.SliceAction
-import com.android.systemui.R
+import com.android.systemui.res.R
 import com.android.systemui.keyguard.KeyguardSliceProvider
 import com.google.android.systemui.smartspace.SmartSpaceCard
 import com.google.android.systemui.smartspace.SmartSpaceController

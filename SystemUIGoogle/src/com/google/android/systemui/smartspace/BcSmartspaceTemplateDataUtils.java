@@ -7,7 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.android.systemui.R;
+import com.android.systemui.res.R;
 
 public final class BcSmartspaceTemplateDataUtils {
     public static int getSecondaryCardRes(int i) {

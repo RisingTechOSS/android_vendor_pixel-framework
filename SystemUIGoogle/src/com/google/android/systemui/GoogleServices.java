@@ -3,16 +3,13 @@ package com.google.android.systemui;
 import android.app.AlarmManager;
 import android.content.Context;
 
-import com.android.systemui.R;
+import com.android.systemui.res.R;
 import com.android.systemui.qs.QsEventLogger;
 import com.android.systemui.VendorServices;
 import com.android.systemui.statusbar.phone.CentralSurfaces;
 
 import com.google.android.systemui.ambientmusic.AmbientIndicationContainer;
 import com.google.android.systemui.ambientmusic.AmbientIndicationService;
-import com.google.android.systemui.input.TouchContextService;
-import com.google.android.systemui.columbus.ColumbusContext;
-import com.google.android.systemui.columbus.ColumbusServiceWrapper;
 
 import java.util.ArrayList;
 
@@ -26,27 +23,19 @@ public class GoogleServices extends VendorServices {
     private final CentralSurfaces mCentralSurfaces;
     private final AlarmManager mAlarmManager;
     private final QsEventLogger mUiEventLogger;
-    private final Lazy<ColumbusServiceWrapper> mColumbusServiceLazy;
 
     @Inject
-    public GoogleServices(Context context, AlarmManager alarmManager, CentralSurfaces centralSurfaces, QsEventLogger uiEventLogger, Lazy<ColumbusServiceWrapper> columbusServiceWrapperLazy) {
+    public GoogleServices(Context context, AlarmManager alarmManager, CentralSurfaces centralSurfaces, QsEventLogger uiEventLogger) {
         super();
         mContext = context;
         mServices = new ArrayList<>();
         mAlarmManager = alarmManager;
         mCentralSurfaces = centralSurfaces;
         mUiEventLogger = uiEventLogger;
-        mColumbusServiceLazy = columbusServiceWrapperLazy;
     }
 
     @Override
     public void start() {
-        if (new ColumbusContext(mContext).isAvailable()) {
-            addService(mColumbusServiceLazy.get());
-        }
-        if (mContext.getResources().getBoolean(R.bool.config_touch_context_enabled)) {
-            addService(new TouchContextService(mContext));
-        }
         AmbientIndicationContainer ambientIndicationContainer = (AmbientIndicationContainer) mCentralSurfaces.getNotificationShadeWindowView().findViewById(R.id.ambient_indication_container);
         ambientIndicationContainer.initializeView(mContext, mCentralSurfaces, ambientIndicationContainer);
         addService(new AmbientIndicationService(mContext, ambientIndicationContainer, mAlarmManager));
