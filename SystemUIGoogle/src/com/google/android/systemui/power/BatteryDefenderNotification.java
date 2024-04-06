@@ -158,61 +158,13 @@ class BatteryDefenderNotification {
     }
 
     private void executeBypassActionWithAsync() {
-        if (!mRunBypassActionTask) {
-            return;
-        }
-        AsyncTask.execute(() -> {
-            IBinder.DeathRecipient cbRecipient = new IBinder.DeathRecipient() {
-                @Override
-                public final void binderDied() {
-                    Log.d(TAG, "serviceDied");
-                }
-            };
-            if(!mHasSystemFeature) {
-                Log.d(TAG, "Device does not support Google Battery");
-                return;
-            }
-            IGoogleBattery initHalInterface = initHalInterface(cbRecipient);
-            if (initHalInterface == null) {
-                Log.d(TAG, "Can not init hal interface");
-            }
-            try {
-                try {
-                    initHalInterface.setProperty(2, 17, 1);
-                    initHalInterface.setProperty(3, 17, 1);
-                    initHalInterface.setProperty(1, 17, 1);
-                } catch (RemoteException e) {
-                    Log.e(TAG, "setProperty error: " + e);
-                }
-            } finally {
-                destroyHalInterface(initHalInterface, cbRecipient);
-            }
-        });
     }
 
     private static IGoogleBattery initHalInterface(IBinder.DeathRecipient deathReceiver) {
-        Log.d(TAG, "initHalInterface");
-        try {
-            IBinder binder = Binder.allowBlocking(ServiceManager.waitForDeclaredService("vendor.google.google_battery.IGoogleBattery/default"));
-            IGoogleBattery batteryInterface = null;
-            if (binder != null) {
-                batteryInterface = IGoogleBattery.Stub.asInterface(binder);
-                if (batteryInterface != null && deathReceiver != null) {
-                    binder.linkToDeath(deathReceiver, 0);
-                }
-            }
-            return batteryInterface;
-        } catch (RemoteException | NoSuchElementException | SecurityException e) {
-            Log.e(TAG, "failed to get Google Battery HAL: ", e);
-            return null;
-        }
+        return null;
     }
 
     private static void destroyHalInterface(IGoogleBattery iGoogleBattery, IBinder.DeathRecipient deathRecipient) {
-        Log.d(TAG, "destroyHalInterface");
-        if (deathRecipient != null && iGoogleBattery != null) {
-            iGoogleBattery.asBinder().unlinkToDeath(deathRecipient, 0);
-        }
     }
 
     private SharedPreferences getSharedPreferences() {
