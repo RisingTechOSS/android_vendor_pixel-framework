@@ -52,7 +52,6 @@ import com.android.systemui.dagger.SysUISingleton;
 import com.android.systemui.dagger.qualifiers.Main;
 import com.android.systemui.dagger.qualifiers.UiBackground;
 import com.android.systemui.demomode.DemoModeController;
-import com.android.systemui.dock.DockManager;
 import com.android.systemui.flags.FeatureFlags;
 import com.android.systemui.fragments.FragmentService;
 import com.android.systemui.keyguard.KeyguardUnlockAnimationController;
@@ -141,6 +140,8 @@ import com.android.systemui.volume.VolumeComponent;
 import com.android.wm.shell.bubbles.Bubbles;
 import com.android.wm.shell.startingsurface.StartingSurface;
 import com.google.android.systemui.NotificationLockscreenUserManagerGoogle;
+import com.google.android.systemui.dreamliner.DockIndicationController;
+import com.google.android.systemui.dreamliner.DockObserver;
 import com.google.android.systemui.reversecharging.ReverseChargingViewController;
 import com.google.android.systemui.smartspace.SmartSpaceController;
 import com.google.android.systemui.statusbar.KeyguardIndicationControllerGoogle;
@@ -165,6 +166,7 @@ public class CentralSurfacesGoogle extends CentralSurfacesImpl {
     private final SysuiStatusBarStateController mStatusBarStateController;
     private final SmartSpaceController mSmartSpaceController;
     private final NotificationLockscreenUserManagerGoogle mNotificationLockscreenUserManagerGoogle;
+    private final DockObserver mDockObserver;
 
     private long mAnimStartTime;
     private int mReceivingBatteryLevel;
@@ -286,7 +288,8 @@ public class CentralSurfacesGoogle extends CentralSurfacesImpl {
             BurnInProtectionController burnInProtectionController,
             Optional<ReverseChargingViewController> reverseChargingViewControllerOptional,
             WallpaperNotifier wallpaperNotifier,
-            SmartSpaceController smartSpaceController
+            SmartSpaceController smartSpaceController,
+            DockObserver dockObserver
     ) {
         super(context, notificationsController, fragmentService, lightBarController, autoHideController, statusBarInitializer, 
                 statusBarWindowController, statusBarWindowStateController, statusBarModeRepository, keyguardUpdateMonitor, 
@@ -342,6 +345,7 @@ public class CentralSurfacesGoogle extends CentralSurfacesImpl {
         mWallpaperNotifier = wallpaperNotifier;
         mSmartSpaceController = smartSpaceController;
         mNotificationLockscreenUserManagerGoogle = notificationLockscreenUserManagerGoogle;
+        mDockObserver = dockObserver;
     }
 
     @Override
@@ -349,6 +353,10 @@ public class CentralSurfacesGoogle extends CentralSurfacesImpl {
         super.start();
         mWallpaperNotifier.attach();
         mBatteryController.observe(getLifecycle(), mBatteryStateChangeCallback);
+        mDockObserver.setDreamlinerGear((ImageView) getNotificationShadeWindowView().findViewById(R.id.dreamliner_gear));
+        mDockObserver.setPhotoPreview((FrameLayout) getNotificationShadeWindowView().findViewById(R.id.photo_preview));
+        mDockObserver.setIndicationController(new DockIndicationController(mContext, mKeyguardIndicationController, mStatusBarStateController, this));
+        mDockObserver.registerDockAlignInfo();
         if (mReverseChargingViewControllerOptional.isPresent()) {
             mReverseChargingViewControllerOptional.get().initialize();
         }

@@ -18,6 +18,7 @@ package com.google.android.systemui.dagger;
 
 import com.android.systemui.dagger.GlobalModule;
 import com.android.systemui.dagger.GlobalRootComponent;
+import com.android.systemui.dagger.qualifiers.InstrumentationTest;
 import com.android.systemui.dagger.WMComponent;
 
 import javax.inject.Singleton;
@@ -28,15 +29,15 @@ import dagger.Component;
 @Component(modules = {
         GlobalModule.class
 })
-public interface SystemUIGoogleGlobalRootComponent extends GlobalRootComponent {
+public interface SysUIGoogleGlobalRootComponent extends GlobalRootComponent {
     @Component.Builder
     interface Builder extends GlobalRootComponent.Builder {
-        SystemUIGoogleGlobalRootComponent build();
+        SysUIGoogleGlobalRootComponent build();
     }
 
     @Override
     WMComponent.Builder getWMComponentBuilder();
 
     @Override
-    SystemUIGoogleComponent.Builder getSysUIComponent();
+    SysUIGoogleSysUIComponent.Builder getSysUIComponent();
 }

@@ -28,14 +28,17 @@ import androidx.annotation.Nullable;
 
 import com.android.systemui.qs.QsEventLogger;
 import com.android.keyguard.KeyguardViewController;
+import com.android.systemui.assist.AssistManager;
 import com.android.systemui.broadcast.BroadcastDispatcher;
 import com.android.systemui.controls.controller.ControlsTileResourceConfiguration;
+import com.android.systemui.SystemUIInitializer;
+import com.android.systemui.dagger.GlobalRootComponent;
+import com.android.systemui.dagger.SysUIComponent;
 import com.android.systemui.dagger.SysUISingleton;
 import com.android.systemui.dagger.qualifiers.Background;
 import com.android.systemui.dagger.qualifiers.Main;
 import com.android.systemui.demomode.DemoModeController;
 import com.android.systemui.dock.DockManager;
-import com.android.systemui.dock.DockManagerImpl;
 import com.android.systemui.doze.DozeHost;
 import com.android.systemui.dump.DumpManager;
 import com.android.systemui.lineage.LineageModule;
@@ -86,9 +89,17 @@ import com.android.systemui.navigationbar.NavigationBarControllerModule;
 import com.android.systemui.statusbar.phone.HeadsUpModule;
 import com.android.systemui.wallpapers.dagger.WallpaperModule;
 import com.android.systemui.statusbar.KeyboardShortcutsModule;
+import com.android.systemui.SystemUIAppComponentFactoryBase;
 
+import com.google.android.systemui.SystemUIGoogleInitializer;
 import com.google.android.systemui.NotificationLockscreenUserManagerGoogle;
+import com.google.android.systemui.assist.AssistManagerGoogle;
+import com.google.android.systemui.assist.dagger.AssistModule;
+import com.google.android.systemui.columbus.dagger.ColumbusModule;
 import com.google.android.systemui.controls.GoogleControlsTileResourceConfigurationImpl;
+import com.google.android.systemui.elmyra.dagger.ElmyraModule;
+import com.google.android.systemui.dreamliner.DockObserver;
+import com.google.android.systemui.dreamliner.dagger.DreamlinerModule;
 import com.google.android.systemui.power.dagger.PowerModuleGoogle;
 import com.google.android.systemui.qs.dagger.QSModuleGoogle;
 import com.google.android.systemui.qs.tileimpl.QSFactoryImplGoogle;
@@ -100,7 +111,9 @@ import com.google.android.systemui.smartspace.dagger.SmartspaceGoogleModule;
 import com.google.android.systemui.statusbar.dagger.StartCentralSurfacesGoogleModule;
 import com.google.android.systemui.statusbar.KeyguardIndicationControllerGoogle;
 import com.google.android.systemui.statusbar.policy.BatteryControllerImplGoogle;
+import com.google.android.systemui.elmyra.ServiceConfigurationGoogle;
 import com.google.android.systemui.statusbar.policy.dagger.SystemUIGooglePolicyModule;
+import com.google.android.systemui.SystemUIGoogleAppComponentFactory;
 
 import javax.inject.Named;
 
@@ -128,13 +141,34 @@ import dagger.Lazy;
         PowerModuleGoogle.class,
         QSModuleGoogle.class,
         StartCentralSurfacesGoogleModule.class,
+        StatusBarEventsModule.class,
         SmartspaceGoogleModule.class,
+        DreamlinerModule.class,
         ReverseChargingModule.class,
+        AssistModule.class,
+        ElmyraModule.class,
+        ColumbusModule.class,
         SystemUIGooglePolicyModule.class,
         LineageModule.class
 })
 
 public abstract class SystemUIGoogleModule {
+
+    @Binds
+    abstract GlobalRootComponent bindGlobalRootComponent(
+            SysUIGoogleGlobalRootComponent globalRootComponent);
+
+    @Binds
+    abstract SystemUIInitializer bindSystemUIInitializer(
+            SystemUIGoogleInitializer systemUIInitializer);
+
+    @Binds
+    abstract SysUIComponent bindSysUIComponent(
+            SysUIGoogleSysUIComponent sysUIComponent);
+
+    @Binds
+    abstract SystemUIAppComponentFactoryBase bindSystemUIAppComponentFactoryBase(
+            SystemUIGoogleAppComponentFactory systemUIAppComponentFactoryBase);
 
     @SysUISingleton
     @Provides
@@ -203,12 +237,16 @@ public abstract class SystemUIGoogleModule {
     abstract KeyguardIndicationController bindKeyguardIndicationControllerGoogle(KeyguardIndicationControllerGoogle keyguardIndicationControllerGoogle);
 
     @Binds
-    abstract DockManager bindDockManager(DockManagerImpl dockManager);
+    abstract DockManager bindDockManager(DockObserver dockManager);
 
     /** */
     @Binds
     @SysUISingleton
     public abstract QSFactory bindQSFactoryGoogle(QSFactoryImplGoogle qsFactoryImpl);
+
+    @Binds
+    @SysUISingleton
+    abstract AssistManager bindAssistManagerGoogle(AssistManagerGoogle assistManager);
 
     @Binds
     abstract ControlsTileResourceConfiguration bindControlsTileResourceConfiguration(GoogleControlsTileResourceConfigurationImpl configuration);

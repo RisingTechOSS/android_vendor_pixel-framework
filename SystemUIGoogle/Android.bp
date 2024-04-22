@@ -1,23 +1,15 @@
 android_library {
-    name: "SystemUIGoogle-res",
-    manifest: "AndroidManifest.xml",
-    resource_dirs: [
-        "res",
-    ],
-    static_libs: [
-        "SystemUI-core",
-    ],
-}
-
-android_library {
     name: "SystemUIGoogle-core",
     srcs: [
         "src/**/*.kt",
         "src/**/*.java",
         "src/**/*.aidl",
     ],
+    resource_dirs: [
+        "res",
+    ],
     static_libs: [
-        "SystemUIGoogle-res",
+        "SystemUI-core",
         "tensorflowlite_java",
         "android.frameworks.stats-V1-java",
         "vendor-pixelatoms-java",
@@ -26,12 +18,17 @@ android_library {
         "googlebattery-lib",
         "google-battery",
         "vendor.google.google_battery-V1-java",
+        "matchmaker-lib",
+        "touchcontext-lib",
+        "nga-lib",
+        "elmyra-lib",
+        "columbus-lib",
+    ],
+    libs: [
+        "keepanno-annotations",
     ],
     manifest: "AndroidManifest.xml",
-
-    javacflags: ["-Adagger.fastInit=enabled"],
     kotlincflags: ["-Xjvm-default=all"],
-
     plugins: ["dagger2-compiler"],
     lint: {
         extra_check_modules: ["SystemUILintChecker"],
@@ -42,12 +39,19 @@ android_app {
     name: "SystemUIGoogle",
     defaults: [
         "platform_app_defaults",
+        "SystemUI_optimized_defaults",
     ],
     static_libs: [
         "SystemUIGoogle-core",
     ],
+    libs: [
+        "ims-common",
+    ],
     jni_libs: ["libtensorflowlite_jni"],
     use_embedded_native_libs: true,
+    overrides: [
+        "SystemUI",
+    ],
     resource_dirs: [],
     asset_dirs: ["assets"],
     aaptflags: [
@@ -60,23 +64,14 @@ android_app {
     certificate: "platform",
     privileged: true,
 
-    optimize: {
-        proguard_flags_files: ["proguard.flags"],
-    },
-
-    libs: [
-        "ims-common",
-    ],
-
-    javacflags: ["-Adagger.fastInit=enabled"],
     kotlincflags: ["-Xjvm-default=all"],
 
     dxflags: ["--multi-dex"],
+    optimize: {
+        proguard_flags_files: ["proguard.flags"],
+    },
     required: [
         "privapp_whitelist_com.android.systemui",
-    ],
-    overrides: [
-        "SystemUI",
     ],
 }
 
