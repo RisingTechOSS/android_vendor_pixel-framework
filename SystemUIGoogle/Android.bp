@@ -23,6 +23,7 @@ android_library {
         "nga-lib",
         "elmyra-lib",
         "columbus-lib",
+        "androidx.concurrent_concurrent-futures-ktx",
     ],
     libs: [
         "keepanno-annotations",
