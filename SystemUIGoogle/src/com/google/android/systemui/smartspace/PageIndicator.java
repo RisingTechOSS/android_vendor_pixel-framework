@@ -52,7 +52,7 @@ public class PageIndicator extends LinearLayout {
 
     public void setNumPages(int pages) {
         if (pages <= 0) {
-            Log.w("PageIndicator", "Total number of pages invalid: " + pages + ". Assuming 1 page.");
+            //Log.w("PageIndicator", "Total number of pages invalid: " + pages + ". Assuming 1 page.");
             pages = 1;
         }
         if (pages < 2) {

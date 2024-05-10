@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewpager.widget.ViewPager;
+import com.android.systemui.Dependency;
 import com.android.systemui.res.R;
 import com.android.systemui.plugins.BcSmartspaceDataPlugin;
 import com.android.systemui.plugins.FalsingManager;
@@ -33,6 +34,7 @@ import com.google.android.systemui.smartspace.logging.BcSmartspaceCardLoggerUtil
 import com.google.android.systemui.smartspace.logging.BcSmartspaceCardLoggingInfo;
 import com.google.android.systemui.smartspace.logging.BcSmartspaceSubcardLoggingInfo;
 import com.google.android.systemui.smartspace.uitemplate.BaseTemplateCard;
+import com.android.systemui.tuner.TunerService;
 import java.time.DateTimeException;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -41,7 +43,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class BcSmartspaceView extends FrameLayout implements BcSmartspaceDataPlugin.SmartspaceTargetListener, BcSmartspaceDataPlugin.SmartspaceView {
+public class BcSmartspaceView extends FrameLayout implements BcSmartspaceDataPlugin.SmartspaceTargetListener, BcSmartspaceDataPlugin.SmartspaceView, TunerService.Tunable {
     public static final String TAG = "BcSmartspaceView";
     public static final boolean DEBUG = Log.isLoggable(TAG, 3);
     public final CardPagerAdapter mAdapter;
@@ -57,6 +59,9 @@ public class BcSmartspaceView extends FrameLayout implements BcSmartspaceDataPlu
     public Animator mRunningAnimation;
     public int mScrollState;
     public ViewPager mViewPager;
+    private boolean mClockStyleEnabled = false;
+    
+    private static final String CLOCK_STYLE = "system:" + "clock_style";
 
     public BcSmartspaceView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
@@ -116,6 +121,18 @@ public class BcSmartspaceView extends FrameLayout implements BcSmartspaceDataPlu
                 BcSmartspaceView.this.mDataProvider.notifySmartspaceEvent(builder2.build());
             }
         };
+        Dependency.get(TunerService.class).addTunable(this, CLOCK_STYLE);
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case CLOCK_STYLE:
+                mClockStyleEnabled = TunerService.parseInteger(newValue, 0) != 0;
+                break;
+            default:
+                break;
+        }
     }
 
     @Override // android.view.View
@@ -138,7 +155,7 @@ public class BcSmartspaceView extends FrameLayout implements BcSmartspaceDataPlu
         super.onAttachedToWindow();
         this.mViewPager.setAdapter(this.mAdapter);
         this.mViewPager.addOnPageChangeListener(this.mOnPageChangeListener);
-        this.mPageIndicator.setNumPages(this.mAdapter.getCount());
+        this.mPageIndicator.setNumPages(mClockStyleEnabled ? 0 : this.mAdapter.getCount());
         try {
             getContext().getContentResolver().registerContentObserver(Settings.Secure.getUriFor("doze_always_on"), false, this.mAodObserver, -1);
             this.mIsAodEnabled = isAodEnabled(getContext());
@@ -185,6 +202,12 @@ public class BcSmartspaceView extends FrameLayout implements BcSmartspaceDataPlu
     }
 
     public void onSmartspaceTargetsUpdated(List<? extends Parcelable> list) {
+        if (mClockStyleEnabled) {
+            if (this.mPageIndicator != null) {
+                this.mPageIndicator.setNumPages(0);
+            }
+            return;
+        }
         int i;
         BaseTemplateCard baseTemplateCard;
         BcSmartspaceCard bcSmartspaceCard;
@@ -396,7 +419,7 @@ public class BcSmartspaceView extends FrameLayout implements BcSmartspaceDataPlu
     }
 
     public void setDozeAmount(float f) {
-        this.mPageIndicator.setAlpha(1.0f - f);
+        this.mPageIndicator.setAlpha(mClockStyleEnabled ? 0 : 1.0f - f);
         ArrayList<SmartspaceTarget> arrayList = this.mAdapter.mSmartspaceTargets;
         this.mAdapter.setDozeAmount(f);
         CardPagerAdapter cardPagerAdapter2 = this.mAdapter;
@@ -404,7 +427,7 @@ public class BcSmartspaceView extends FrameLayout implements BcSmartspaceDataPlu
             this.mViewPager.setCurrentItem(0, false);
             this.mPageIndicator.setPageOffset(0, 0.0f);
         }
-        this.mPageIndicator.setNumPages(this.mAdapter.getCount());
+        this.mPageIndicator.setNumPages(mClockStyleEnabled ? 0 : this.mAdapter.getCount());
         String packageName = getContext().getPackageName();
         CardPagerAdapter cardPagerAdapter3 = this.mAdapter;
         int loggingDisplaySurface = BcSmartSpaceUtil.getLoggingDisplaySurface(packageName, cardPagerAdapter3.mIsDreaming, cardPagerAdapter3.mDozeAmount);

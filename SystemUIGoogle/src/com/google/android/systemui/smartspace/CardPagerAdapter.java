@@ -19,12 +19,14 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewpager.widget.PagerAdapter;
 import com.android.internal.graphics.ColorUtils;
 import com.android.launcher3.icons.GraphicsUtils;
+import com.android.systemui.Dependency;
 import com.android.systemui.res.R;
 import com.android.systemui.plugins.BcSmartspaceDataPlugin;
 import com.google.android.systemui.smartspace.logging.BcSmartspaceCardLoggerUtil;
 import com.google.android.systemui.smartspace.logging.BcSmartspaceCardLoggingInfo;
 import com.google.android.systemui.smartspace.logging.BcSmartspaceSubcardLoggingInfo;
 import com.google.android.systemui.smartspace.uitemplate.BaseTemplateCard;
+import com.android.systemui.tuner.TunerService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -32,7 +34,7 @@ import java.util.UUID;
 import java.util.function.IntPredicate;
 import java.util.stream.IntStream;
 
-public class CardPagerAdapter extends PagerAdapter {
+public class CardPagerAdapter extends PagerAdapter implements TunerService.Tunable {
     public static final int MAX_FEATURE_TYPE = 41;
     public static final int MIN_FEATURE_TYPE = -2;
     public final View mRoot;
@@ -58,6 +60,9 @@ public class CardPagerAdapter extends PagerAdapter {
     public boolean mKeyguardBypassEnabled = false;
     public boolean mHasDifferentTargets = false;
     public String mUiSurface;
+    private boolean mClockStyleEnabled = false;
+
+    private static final String CLOCK_STYLE = "system:" + "clock_style";
 
     List<SmartspaceTarget> getTargets() {
         return this.mSmartspaceTargets;
@@ -68,6 +73,18 @@ public class CardPagerAdapter extends PagerAdapter {
         int attrColor = GraphicsUtils.getAttrColor(view.getContext(), 16842806);
         this.mPrimaryTextColor = attrColor;
         this.mCurrentTextColor = attrColor;
+        Dependency.get(TunerService.class).addTunable(this, CLOCK_STYLE);
+    }
+
+    @Override
+    public void onTuningChanged(String key, String newValue) {
+        switch (key) {
+            case CLOCK_STYLE:
+                mClockStyleEnabled = TunerService.parseInteger(newValue, 0) != 0;
+                break;
+            default:
+                break;
+        }
     }
 
     public static int getBaseLegacyCardRes(int layout) {
@@ -387,7 +404,7 @@ public class CardPagerAdapter extends PagerAdapter {
             baseTemplateCard.mTemplateData = smartspaceTarget.getTemplateData();
             baseTemplateCard.mFeatureType = smartspaceTarget.getFeatureType();
             baseTemplateCard.mLoggingInfo = bcSmartspaceCardLoggingInfo2;
-            baseTemplateCard.mShouldShowPageIndicator = this.mSmartspaceTargets.size() > 1;
+            baseTemplateCard.mShouldShowPageIndicator = this.mSmartspaceTargets.size() > 1 && !mClockStyleEnabled;
             baseTemplateCard.mValidSecondaryCard = false;
             ViewGroup viewGroup = baseTemplateCard.mTextGroup;
             if (viewGroup != null) {
@@ -540,7 +557,7 @@ public class CardPagerAdapter extends PagerAdapter {
         bcSmartspaceCard.mEventNotifier = smartspaceEventNotifier;
         SmartspaceAction headerAction = smartspaceTarget.getHeaderAction();
         SmartspaceAction baseAction = smartspaceTarget.getBaseAction();
-        bcSmartspaceCard.mUsePageIndicatorUi = this.mSmartspaceTargets.size() > 1;
+        bcSmartspaceCard.mUsePageIndicatorUi = this.mSmartspaceTargets.size() > 1 && !mClockStyleEnabled;
         bcSmartspaceCard.mValidSecondaryCard = false;
         ViewGroup viewGroup4 = bcSmartspaceCard.mTextGroup;
         if (viewGroup4 != null) {
