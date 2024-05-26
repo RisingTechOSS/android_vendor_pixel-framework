@@ -39,7 +39,6 @@ android_app {
     name: "SystemUIGoogle",
     defaults: [
         "platform_app_defaults",
-        "SystemUI_optimized_defaults",
     ],
     static_libs: [
         "SystemUIGoogle-core",
