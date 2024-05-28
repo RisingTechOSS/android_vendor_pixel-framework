@@ -45,6 +45,16 @@ constructor(
                 zenController.init()
                 mediaController.init()
             }
+            else -> {
+                context.packageManager.setComponentEnabledSetting(
+                    ComponentName(
+                        "com.android.systemui",
+                        "com.google.android.systemui.keyguard.KeyguardSliceProviderGoogle"
+                    ),
+                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                    PackageManager.DONT_KILL_APP
+                )
+            }
         }
     }
 }
