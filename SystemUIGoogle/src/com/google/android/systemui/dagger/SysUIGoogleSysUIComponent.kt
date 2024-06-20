@@ -19,7 +19,6 @@ package com.google.android.systemui.dagger
 
 import com.android.systemui.dagger.*
 import com.android.systemui.globalactions.ShutdownUiModule
-import com.android.systemui.recents.RecentsModule
 import com.android.systemui.keyguard.CustomizationProvider
 import com.android.systemui.people.PeopleProvider
 import com.android.systemui.statusbar.NotificationInsetsModule

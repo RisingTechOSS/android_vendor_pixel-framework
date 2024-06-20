@@ -34,10 +34,13 @@ import dagger.Lazy;
 @SysUISingleton
 public class GoogleDefaultUiController extends DefaultUiController {
     @Inject
-    public GoogleDefaultUiController(Context context, AssistLogger assistLogger,
-                                     WindowManager windowManager, MetricsLogger metricsLogger,
-                                     Lazy<AssistManager> assistManagerLazy,
-                                     NavigationBarController navigationBarController) {
+    public GoogleDefaultUiController(
+            Context context,
+            AssistLogger assistLogger,
+            WindowManager windowManager,
+            MetricsLogger metricsLogger,
+            Lazy<AssistManager> assistManagerLazy,
+            NavigationBarController navigationBarController) {
         super(context, assistLogger, windowManager, metricsLogger, assistManagerLazy, navigationBarController);
         setGoogleAssistant(false);
     }

@@ -18,9 +18,9 @@ package com.google.android.systemui.smartspace.dagger
 
 import com.android.systemui.plugins.BcSmartspaceDataPlugin
 import com.android.systemui.smartspace.SmartspaceTargetFilter
-import com.android.systemui.smartspace.filters.LockscreenAndDreamTargetFilter
+import com.android.systemui.smartspace.filters.LockscreenTargetFilter
 import com.android.systemui.smartspace.dagger.SmartspaceModule.Companion.DREAM_SMARTSPACE_DATA_PLUGIN
-import com.android.systemui.smartspace.dagger.SmartspaceModule.Companion.DREAM_SMARTSPACE_TARGET_FILTER
+import com.android.systemui.smartspace.dagger.SmartspaceModule.Companion.LOCKSCREEN_SMARTSPACE_TARGET_FILTER
 import com.google.android.systemui.smartspace.*
 import dagger.Binds
 import dagger.Module
@@ -35,8 +35,8 @@ abstract class SmartspaceGoogleModule {
     ): BcSmartspaceDataPlugin?
 
     @Binds
-    @Named(DREAM_SMARTSPACE_TARGET_FILTER)
-    abstract fun bindLockscreenAndDreamTargetFilter(
-        filter: LockscreenAndDreamTargetFilter
+    @Named(LOCKSCREEN_SMARTSPACE_TARGET_FILTER)
+    abstract fun bindLockscreenTargetFilter(
+        filter: LockscreenTargetFilter
     ): SmartspaceTargetFilter?
 }

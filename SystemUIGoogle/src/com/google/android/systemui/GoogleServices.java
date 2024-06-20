@@ -7,6 +7,7 @@ import com.android.systemui.res.R;
 import com.android.systemui.qs.QsEventLogger;
 import com.android.systemui.VendorServices;
 import com.android.systemui.statusbar.phone.CentralSurfaces;
+import com.android.systemui.util.wakelock.DelayedWakeLock;
 
 import com.google.android.systemui.ambientmusic.AmbientIndicationContainer;
 import com.google.android.systemui.ambientmusic.AmbientIndicationService;
@@ -31,9 +32,17 @@ public class GoogleServices extends VendorServices {
     private final QsEventLogger mUiEventLogger;
     private final Lazy<ServiceConfigurationGoogle> mServiceConfigurationGoogle;
     private final Lazy<ColumbusServiceWrapper> mColumbusServiceLazy;
+    private final DelayedWakeLock.Factory mDelayedWakeLockFactory;
 
     @Inject
-    public GoogleServices(Context context, AlarmManager alarmManager, CentralSurfaces centralSurfaces, QsEventLogger uiEventLogger, Lazy<ServiceConfigurationGoogle> serviceConfigurationGoogleLazy, Lazy<ColumbusServiceWrapper> columbusServiceWrapperLazy) {
+    public GoogleServices(
+            Context context,
+            AlarmManager alarmManager,
+            CentralSurfaces centralSurfaces,
+            QsEventLogger uiEventLogger,
+            Lazy<ServiceConfigurationGoogle> serviceConfigurationGoogleLazy,
+            Lazy<ColumbusServiceWrapper> columbusServiceWrapperLazy,
+            DelayedWakeLock.Factory delayedWakeLockFactory) {
         super();
         mContext = context;
         mServices = new ArrayList<>();
@@ -42,6 +51,7 @@ public class GoogleServices extends VendorServices {
         mUiEventLogger = uiEventLogger;
         mServiceConfigurationGoogle = serviceConfigurationGoogleLazy;
         mColumbusServiceLazy = columbusServiceWrapperLazy;
+        mDelayedWakeLockFactory = delayedWakeLockFactory;
     }
 
     @Override
@@ -55,8 +65,13 @@ public class GoogleServices extends VendorServices {
         if (mContext.getResources().getBoolean(R.bool.config_touch_context_enabled)) {
             addService(new TouchContextService(mContext));
         }
-        AmbientIndicationContainer ambientIndicationContainer = (AmbientIndicationContainer) mCentralSurfaces.getNotificationShadeWindowView().findViewById(R.id.ambient_indication_container);
-        ambientIndicationContainer.initializeView(mContext, mCentralSurfaces, ambientIndicationContainer);
+
+        final AmbientIndicationContainer ambientIndicationContainer =
+            (AmbientIndicationContainer) mCentralSurfaces
+                .getNotificationShadeWindowView()
+                    .findViewById(R.id.ambient_indication_container);
+        ambientIndicationContainer.initializeView(
+            mContext, mCentralSurfaces, ambientIndicationContainer, mDelayedWakeLockFactory);
         addService(new AmbientIndicationService(mContext, ambientIndicationContainer, mAlarmManager));
     }
 

@@ -18,7 +18,8 @@ package com.google.android.systemui.power.dagger;
 
 import android.content.Context;
 
-import com.android.systemui.animation.DialogLaunchAnimator;
+import com.android.internal.logging.UiEventLogger;
+import com.android.systemui.animation.DialogTransitionAnimator;
 import com.android.systemui.broadcast.BroadcastDispatcher;
 import com.android.systemui.broadcast.BroadcastSender;
 import com.android.systemui.dagger.SysUISingleton;
@@ -28,6 +29,7 @@ import com.android.systemui.power.PowerUI;
 import com.android.systemui.power.data.repository.PowerRepositoryModule;
 import com.android.systemui.qs.QsEventLogger;
 import com.android.systemui.settings.UserTracker;
+import com.android.systemui.statusbar.phone.SystemUIDialog;
 import com.android.systemui.statusbar.policy.BatteryController;
 import com.android.systemui.util.settings.GlobalSettings;
 import com.google.android.systemui.power.EnhancedEstimatesGoogleImpl;
@@ -50,11 +52,17 @@ import dagger.Provides;
 public interface PowerModuleGoogle {
     @Provides
     @SysUISingleton
-    static PowerNotificationWarningsGoogleImpl providePowerNotificationWarningsGoogleImpl(Context context, ActivityStarter activityStarter,
-                                                                                          BroadcastSender broadcastSender, Lazy<BatteryController> batteryControllerLazy,
-                                                                                          DialogLaunchAnimator dialogLaunchAnimator, QsEventLogger uiEventLogger,
-                                                                                          BroadcastDispatcher broadcastDispatcher, GlobalSettings globalSettings, UserTracker userTracker) {
-        return new PowerNotificationWarningsGoogleImpl(context, activityStarter, broadcastSender, batteryControllerLazy, dialogLaunchAnimator, uiEventLogger, broadcastDispatcher, globalSettings, userTracker);
+    static PowerNotificationWarningsGoogleImpl providePowerNotificationWarningsGoogleImpl(
+            Context context,
+            ActivityStarter activityStarter,
+            BroadcastSender broadcastSender,
+            Lazy<BatteryController> batteryControllerLazy,
+            DialogTransitionAnimator dialogTransitionAnimator,
+            UiEventLogger uiEventLogger,
+            UserTracker userTracker,
+            SystemUIDialog.Factory systemUIDialogFactory,
+            BroadcastDispatcher broadcastDispatcher) {
+        return new PowerNotificationWarningsGoogleImpl(context, activityStarter, broadcastSender, batteryControllerLazy, dialogTransitionAnimator, uiEventLogger, userTracker, systemUIDialogFactory, broadcastDispatcher);
     }
 
     /**

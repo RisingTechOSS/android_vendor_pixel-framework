@@ -34,6 +34,7 @@ import com.android.keyguard.KeyguardUpdateMonitorCallback;
 import com.android.systemui.assist.AssistLogger;
 import com.android.systemui.assist.AssistManager;
 import com.android.systemui.assist.AssistantSessionEvent;
+import com.android.systemui.assist.domain.interactor.AssistInteractor;
 import com.android.systemui.assist.PhoneStateMonitor;
 import com.android.systemui.assist.ui.DefaultUiController;
 import com.android.systemui.broadcast.BroadcastDispatcher;
@@ -76,38 +77,40 @@ public class AssistManagerGoogle extends AssistManager {
     private AssistManager.UiController mUiController;
 
     @Inject
-    public AssistManagerGoogle(DeviceProvisionedController controller,
-                               Context context,
-                               AssistUtils assistUtils,
-                               CommandQueue commandQueue,
-                               PhoneStateMonitor phoneStateMonitor,
-                               OverviewProxyService overviewProxyService,
-                               Lazy<SysUiState> sysUiState,
-                               DefaultUiController defaultUiController,
-                               GoogleDefaultUiController googleDefaultUiController,
-                               AssistLogger assistLogger,
-                               @Main Handler handler,
-                               BroadcastDispatcher broadcastDispatcher,
-                               OpaEnabledDispatcher opaEnabledDispatcher,
-                               OpaEnabledReceiver opaEnabledReceiver,
-                               KeyguardUpdateMonitor keyguardUpdateMonitor,
-                               NavigationModeController navigationModeController,
-                               AssistantPresenceHandler assistantPresenceHandler,
-                               NgaUiController ngaUiController,
-                               NgaMessageHandler ngaMessageHandler,
-                               UserTracker userTracker,
-                               DisplayTracker displayTracker,
-                               SecureSettings secureSettings,
-                               IWindowManager iWindowManager,
-                               SelectedUserInteractor selectedUserInteractor,
-                               ActivityManager activityManager) {
+    public AssistManagerGoogle(
+            DeviceProvisionedController controller,
+            Context context,
+            AssistUtils assistUtils,
+            CommandQueue commandQueue,
+            PhoneStateMonitor phoneStateMonitor,
+            OverviewProxyService overviewProxyService,
+            Lazy<SysUiState> sysUiState,
+            DefaultUiController defaultUiController,
+            AssistLogger assistLogger,
+            @Main Handler uiHandler,
+            UserTracker userTracker,
+            DisplayTracker displayTracker,
+            SecureSettings secureSettings,
+            SelectedUserInteractor selectedUserInteractor,
+            ActivityManager activityManager,
+            AssistInteractor interactor,
+            GoogleDefaultUiController googleDefaultUiController,
+            BroadcastDispatcher broadcastDispatcher,
+            OpaEnabledDispatcher opaEnabledDispatcher,
+            OpaEnabledReceiver opaEnabledReceiver,
+            KeyguardUpdateMonitor keyguardUpdateMonitor,
+            NavigationModeController navigationModeController,
+            AssistantPresenceHandler assistantPresenceHandler,
+            NgaUiController ngaUiController,
+            NgaMessageHandler ngaMessageHandler,
+            IWindowManager iWindowManager) {
         super(controller, context, assistUtils, commandQueue,
                 phoneStateMonitor, overviewProxyService,
                 sysUiState, defaultUiController,
-                assistLogger, handler, userTracker,
+                assistLogger, uiHandler, userTracker,
                 displayTracker, secureSettings,
-                selectedUserInteractor, activityManager);
-        mUiHandler = handler;
+                selectedUserInteractor, activityManager, interactor);
+        mUiHandler = uiHandler;
         mDefaultUiController = googleDefaultUiController;
         mUiController = googleDefaultUiController;
         mNgaUiController = ngaUiController;

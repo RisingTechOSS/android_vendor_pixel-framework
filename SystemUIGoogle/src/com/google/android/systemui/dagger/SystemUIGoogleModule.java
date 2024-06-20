@@ -25,46 +25,64 @@ import android.os.Handler;
 import android.os.PowerManager;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.NonNull;
 
-import com.android.systemui.qs.QsEventLogger;
 import com.android.keyguard.KeyguardViewController;
+import com.android.systemui.accessibility.SystemActionsModule;
 import com.android.systemui.assist.AssistManager;
+import com.android.systemui.battery.BatterySaverModule;
 import com.android.systemui.broadcast.BroadcastDispatcher;
 import com.android.systemui.controls.controller.ControlsTileResourceConfiguration;
-import com.android.systemui.SystemUIInitializer;
 import com.android.systemui.dagger.GlobalRootComponent;
-import com.android.systemui.dagger.SysUIComponent;
-import com.android.systemui.dagger.SysUISingleton;
 import com.android.systemui.dagger.qualifiers.Background;
 import com.android.systemui.dagger.qualifiers.Main;
+import com.android.systemui.dagger.SysUIComponent;
+import com.android.systemui.dagger.SysUISingleton;
 import com.android.systemui.demomode.DemoModeController;
+import com.android.systemui.display.ui.viewmodel.ConnectingDisplayViewModel;
 import com.android.systemui.dock.DockManager;
+import com.android.systemui.dock.DockManagerImpl;
 import com.android.systemui.doze.DozeHost;
 import com.android.systemui.dump.DumpManager;
 import com.android.systemui.lineage.LineageModule;
 import com.android.systemui.media.dagger.MediaModule;
+import com.android.systemui.media.muteawait.MediaMuteAwaitConnectionCli;
+import com.android.systemui.media.nearby.NearbyMediaDevicesManager;
 import com.android.systemui.navigationbar.gestural.GestureModule;
+import com.android.systemui.navigationbar.NavigationBarControllerModule;
 import com.android.systemui.plugins.BcSmartspaceDataPlugin;
 import com.android.systemui.plugins.qs.QSFactory;
 import com.android.systemui.plugins.statusbar.StatusBarStateController;
+import com.android.systemui.power.dagger.PowerModule;
 import com.android.systemui.power.EnhancedEstimates;
 import com.android.systemui.qs.dagger.QSModule;
+import com.android.systemui.qs.QsEventLogger;
 import com.android.systemui.qs.tileimpl.QSFactoryImpl;
+import com.android.systemui.reardisplay.RearDisplayModule;
 import com.android.systemui.recents.Recents;
 import com.android.systemui.recents.RecentsImplementation;
+import com.android.systemui.rotationlock.RotationLockModule;
+import com.android.systemui.rotationlock.RotationLockNewModule;
+import com.android.systemui.scene.SceneContainerFrameworkModule;
+import com.android.systemui.ScreenDecorationsModule;
 import com.android.systemui.screenshot.ReferenceScreenshotModule;
+import com.android.systemui.settings.MultiUserUtilsModule;
+import com.android.systemui.settings.UserContentResolverProvider;
 import com.android.systemui.shade.NotificationShadeWindowControllerImpl;
 import com.android.systemui.shade.ShadeExpansionStateManager;
-import com.android.systemui.settings.UserContentResolverProvider;
+import com.android.systemui.shade.ShadeModule;
 import com.android.systemui.statusbar.CommandQueue;
 import com.android.systemui.statusbar.events.StatusBarEventsModule;
-import com.android.systemui.statusbar.NotificationLockscreenUserManager;
-import com.android.systemui.statusbar.NotificationLockscreenUserManagerImpl;
-import com.android.systemui.statusbar.NotificationShadeWindowController;
+import com.android.systemui.statusbar.KeyboardShortcutsModule;
 import com.android.systemui.statusbar.KeyguardIndicationController;
 import com.android.systemui.statusbar.notification.collection.provider.VisualStabilityProvider;
 import com.android.systemui.statusbar.notification.collection.render.GroupMembershipManager;
+import com.android.systemui.statusbar.NotificationLockscreenUserManager;
+import com.android.systemui.statusbar.NotificationLockscreenUserManagerImpl;
+import com.android.systemui.statusbar.NotificationShadeWindowController;
 import com.android.systemui.statusbar.phone.DozeServiceHost;
+import com.android.systemui.statusbar.phone.fragment.CollapsedStatusBarFragmentStartableModule;
+import com.android.systemui.statusbar.phone.HeadsUpModule;
 import com.android.systemui.statusbar.phone.KeyguardBypassController;
 import com.android.systemui.statusbar.phone.StatusBarKeyguardViewManager;
 import com.android.systemui.statusbar.policy.AccessibilityManagerWrapper;
@@ -76,20 +94,28 @@ import com.android.systemui.statusbar.policy.IndividualSensorPrivacyController;
 import com.android.systemui.statusbar.policy.IndividualSensorPrivacyControllerImpl;
 import com.android.systemui.statusbar.policy.SensorPrivacyController;
 import com.android.systemui.statusbar.policy.SensorPrivacyControllerImpl;
-import com.android.systemui.volume.dagger.VolumeModule;
-import com.android.systemui.rotationlock.RotationLockModule;
-import com.android.systemui.statusbar.policy.AospPolicyModule;
-
-import com.android.systemui.battery.BatterySaverModule;
-import com.android.systemui.settings.dagger.MultiUserUtilsModule;
-import com.android.systemui.statusbar.phone.fragment.CollapsedStatusBarFragmentStartableModule;
-import com.android.systemui.shade.ShadeModule;
-import com.android.systemui.scene.SceneContainerFrameworkModule;
-import com.android.systemui.navigationbar.NavigationBarControllerModule;
-import com.android.systemui.statusbar.phone.HeadsUpModule;
-import com.android.systemui.wallpapers.dagger.WallpaperModule;
-import com.android.systemui.statusbar.KeyboardShortcutsModule;
 import com.android.systemui.SystemUIAppComponentFactoryBase;
+import com.android.systemui.SystemUIInitializer;
+import com.android.systemui.toast.ToastModule;
+import com.android.systemui.unfold.SysUIUnfoldStartableModule;
+import com.android.systemui.unfold.UnfoldTransitionModule;
+import com.android.systemui.volume.dagger.VolumeModule;
+import com.android.systemui.wallpapers.dagger.WallpaperModule;
+import com.android.systemui.wallpapers.dagger.WallpaperModule; 
+import com.android.systemui.statusbar.policy.HeadsUpManagerLogger;
+import com.android.systemui.plugins.statusbar.StatusBarStateController;
+import com.android.systemui.statusbar.phone.KeyguardBypassController;
+import com.android.systemui.statusbar.notification.collection.render.GroupMembershipManager;
+import com.android.systemui.statusbar.notification.collection.provider.VisualStabilityProvider;
+import com.android.systemui.statusbar.policy.ConfigurationController;
+import com.android.systemui.statusbar.phone.HeadsUpManagerPhone;
+import com.android.systemui.util.settings.GlobalSettings;
+import com.android.systemui.util.time.SystemClock;
+import com.android.systemui.util.concurrency.DelayableExecutor;
+import com.android.systemui.statusbar.policy.AccessibilityManagerWrapper;
+import com.android.internal.logging.UiEventLogger;
+import com.android.systemui.util.kotlin.JavaAdapter;
+import com.android.systemui.shade.domain.interactor.ShadeInteractor;
 
 import com.google.android.systemui.SystemUIGoogleInitializer;
 import com.google.android.systemui.NotificationLockscreenUserManagerGoogle;
@@ -125,15 +151,26 @@ import dagger.Lazy;
 
 @Module(includes = {
         CollapsedStatusBarFragmentStartableModule.class,
+        ConnectingDisplayViewModel.StartableModule.class,
         GestureModule.class,
         HeadsUpModule.class,
+        KeyboardShortcutsModule.class,
         MediaModule.class,
+        MediaMuteAwaitConnectionCli.StartableModule.class,
         MultiUserUtilsModule.class,
         NavigationBarControllerModule.class,
-        ShadeModule.class,
+        NearbyMediaDevicesManager.StartableModule.class,
+        RearDisplayModule.class,
         ReferenceScreenshotModule.class,
         RotationLockModule.class,
+        RotationLockNewModule.class,
+        ScreenDecorationsModule.class,
+        SystemActionsModule.class,
+        ShadeModule.class,
         SceneContainerFrameworkModule.class,
+        SysUIUnfoldStartableModule.class,
+        UnfoldTransitionModule.Startables.class,
+        ToastModule.class,
         VolumeModule.class,
         WallpaperModule.class,
         KeyboardShortcutsModule.class,
@@ -200,6 +237,14 @@ public abstract class SystemUIGoogleModule {
         return spC;
     }
 
+    /** */
+    @Binds
+    @SysUISingleton
+    public abstract QSFactory bindQSFactoryGoogle(QSFactoryImplGoogle qsFactoryImpl);
+
+    @Binds
+    abstract DockManager bindDockManager(DockObserver dockManager);
+
     @SysUISingleton
     @Provides
     @Named(ALLOW_NOTIFICATION_LONG_PRESS_NAME)
@@ -235,14 +280,6 @@ public abstract class SystemUIGoogleModule {
 
     @Binds
     abstract KeyguardIndicationController bindKeyguardIndicationControllerGoogle(KeyguardIndicationControllerGoogle keyguardIndicationControllerGoogle);
-
-    @Binds
-    abstract DockManager bindDockManager(DockObserver dockManager);
-
-    /** */
-    @Binds
-    @SysUISingleton
-    public abstract QSFactory bindQSFactoryGoogle(QSFactoryImplGoogle qsFactoryImpl);
 
     @Binds
     @SysUISingleton

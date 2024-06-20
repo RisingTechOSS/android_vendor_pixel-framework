@@ -27,16 +27,19 @@ import android.util.Log;
 import androidx.annotation.VisibleForTesting;
 
 import com.android.internal.logging.UiEventLogger;
-import com.android.systemui.animation.DialogLaunchAnimator;
+import com.android.systemui.animation.DialogTransitionAnimator;
 import com.android.systemui.broadcast.BroadcastDispatcher;
 import com.android.systemui.broadcast.BroadcastSender;
 import com.android.systemui.plugins.ActivityStarter;
 import com.android.systemui.power.PowerNotificationWarnings;
 import com.android.systemui.settings.UserTracker;
+import com.android.systemui.statusbar.phone.SystemUIDialog;
 import com.android.systemui.statusbar.policy.BatteryController;
 import com.android.systemui.util.settings.GlobalSettings;
 
 import dagger.Lazy;
+
+import javax.inject.Inject;
 
 public final class PowerNotificationWarningsGoogleImpl extends PowerNotificationWarnings {
     @VisibleForTesting
@@ -47,11 +50,20 @@ public final class PowerNotificationWarningsGoogleImpl extends PowerNotification
     private BatteryDefenderNotification mBatteryDefenderNotification;
     private BatteryInfoBroadcast mBatteryInfoBroadcast;
 
-    public PowerNotificationWarningsGoogleImpl(Context context, ActivityStarter activityStarter,
-                                               BroadcastSender broadcastSender, Lazy<BatteryController> batteryControllerLazy,
-                                               DialogLaunchAnimator dialogLaunchAnimator, UiEventLogger uiEventLogger,
-                                               BroadcastDispatcher broadcastDispatcher, GlobalSettings globalSettings, UserTracker userTracker) {
-        super(context, activityStarter, broadcastSender, batteryControllerLazy, dialogLaunchAnimator, uiEventLogger, globalSettings, userTracker);
+    private static final boolean DEBUG = false;
+
+    @Inject
+    public PowerNotificationWarningsGoogleImpl(
+            Context context,
+            ActivityStarter activityStarter,
+            BroadcastSender broadcastSender,
+            Lazy<BatteryController> batteryControllerLazy,
+            DialogTransitionAnimator dialogTransitionAnimator,
+            UiEventLogger uiEventLogger,
+            UserTracker userTracker,
+            SystemUIDialog.Factory systemUIDialogFactory,
+            BroadcastDispatcher broadcastDispatcher) {
+        super(context, activityStarter, broadcastSender, batteryControllerLazy, dialogTransitionAnimator, uiEventLogger, userTracker, systemUIDialogFactory);
         Handler handler = new Handler(Looper.getMainLooper());
         mHandler = handler;
         mBroadcastReceiver = new BroadcastReceiver() {

@@ -21,7 +21,8 @@ import android.content.Context;
 import com.android.systemui.dagger.SysUISingleton;
 import com.android.systemui.keyguard.KeyguardViewMediator;
 import com.android.systemui.navigationbar.NavigationModeController;
-import com.android.systemui.statusbar.policy.HeadsUpManager;
+import com.android.systemui.statusbar.phone.HeadsUpManagerPhone;
+import com.android.systemui.statusbar.phone.HeadsUpModule;
 import com.android.systemui.statusbar.policy.KeyguardStateController;
 import com.android.systemui.telephony.TelephonyListenerManager;
 import com.google.android.systemui.assist.AssistManagerGoogle;
@@ -39,12 +40,17 @@ import com.google.android.systemui.elmyra.feedback.SquishyNavigationButtons;
 import com.google.android.systemui.elmyra.gates.TelephonyActivity;
 import com.google.android.systemui.statusbar.phone.CentralSurfacesGoogle;
 
+import com.google.android.systemui.statusbar.phone.dagger.StatusBarPhoneModule;
+
 import java.util.Optional;
 
 import dagger.Module;
 import dagger.Provides;
 
-@Module
+@Module(includes = {
+        HeadsUpModule.class,
+        StatusBarPhoneModule.class,
+})
 public class ElmyraModule {
 
     @Provides
@@ -91,7 +97,7 @@ public class ElmyraModule {
 
     @Provides
     @SysUISingleton
-    static UnpinNotifications provideUnpinNotificationsElmyra(Context context, Optional<HeadsUpManager> optional) {
+    static UnpinNotifications provideUnpinNotificationsElmyra(Context context, Optional<HeadsUpManagerPhone> optional) {
         return new UnpinNotifications(context, optional);
     }
 

@@ -19,6 +19,13 @@
     </string-array>
     <string-array name="config_appsSupportMultiInstancesSplit">
         <item>com.android.chrome</item>
+        <item>com.chrome.canary</item>
+        <item>com.chrome.dev</item>
+        <item>com.chrome.beta</item>
+        <item>com.google.android.apps.chrome</item>
+        <item>org.chromium.chrome</item>
+        <item>com.google.android.apps.docs</item>
+        <item>com.android.server.wm.flicker.testapp</item>
     </string-array>
     <array name="config_dock_bound_components"/>
     <array name="config_dock_setup_completed_packages"/>
@@ -45,8 +52,10 @@
         <item>accessibility_display_daltonizer_enabled:color_correction</item>
         <item>accessibility_display_inversion_enabled:inversion</item>
         <item>one_handed_mode_enabled:onehanded</item>
+        <item>accessibility_font_scaling_has_been_changed:font_scaling</item>
         <item>wind_down_first_time_setup:custom(com.google.android.apps.wellbeing/.screen.ui.GrayscaleTileService)</item>
         <item>focus_mode_first_time_setup:custom(com.google.android.apps.wellbeing/.focusmode.quicksettings.FocusModeTileService)</item>
+        <item>vpn_first_time_enabled:custom(com.google.android.apps.privacy.wildlife/.quicksettings.WildlifeVpnTileService)</item>
     </string-array>
     <string-array name="system_ui_packages">
         <item>com.android.keyguard</item>

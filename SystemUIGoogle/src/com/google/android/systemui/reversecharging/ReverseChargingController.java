@@ -26,8 +26,7 @@ import android.hardware.usb.UsbManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.nfc.IAppCallback;
-import android.nfc.INfcAdapter;
+import android.nfc.NfcAdapter;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -42,6 +41,8 @@ import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.android.systemui.dagger.qualifiers.Background;
+import com.android.systemui.dagger.qualifiers.Main;
 import com.android.systemui.BootCompleteCache;
 import com.android.systemui.res.R;
 import com.android.systemui.broadcast.BroadcastDispatcher;
@@ -56,6 +57,8 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
+
+import dagger.Lazy;
 
 @SysUISingleton
 public class ReverseChargingController extends BroadcastReceiver implements CallbackController<ReverseChargingChangeCallback> {
@@ -84,12 +87,12 @@ public class ReverseChargingController extends BroadcastReceiver implements Call
     final int[] mNfcUsbProductIds;
     final int[] mNfcUsbVendorIds;
     private final AlarmManager mAlarmManager;
-    private final Executor mBgExecutor;
+    private final @Background Executor mBgExecutor;
     private final BootCompleteCache mBootCompleteCache;
     private final BroadcastDispatcher mBroadcastDispatcher;
     private final Context mContext;
     private final boolean mDoesNfcConflictWithWlc;
-    private final Executor mMainExecutor;
+    private final @Main Executor mMainExecutor;
     private final Optional<ReverseWirelessCharger> mRtxChargerManagerOptional;
     private final IThermalService mThermalService;
     private final Optional<UsbManager> mUsbManagerOptional;
@@ -163,7 +166,7 @@ public class ReverseChargingController extends BroadcastReceiver implements Call
     };
 
     @Inject
-    public ReverseChargingController(Context context, BroadcastDispatcher broadcastDispatcher, Optional<ReverseWirelessCharger> optional, AlarmManager alarmManager, Optional<UsbManager> optional2, Executor executor, Executor executor2, BootCompleteCache bootCompleteCache, IThermalService iThermalService) {
+    public ReverseChargingController(Context context, BroadcastDispatcher broadcastDispatcher, Optional<ReverseWirelessCharger> optional, AlarmManager alarmManager, Optional<UsbManager> optional2, @Main Executor executor, @Background Executor executor2, BootCompleteCache bootCompleteCache, IThermalService iThermalService) {
         mContext = context;
         mBroadcastDispatcher = broadcastDispatcher;
         mRtxChargerManagerOptional = optional;
@@ -452,7 +455,7 @@ public class ReverseChargingController extends BroadcastReceiver implements Call
             Log.d("ReverseChargingControl", "Change NFC reader mode to flags: " + i);
         }
         try {
-            INfcAdapter.Stub.asInterface(ServiceManager.getService("nfc")).setReaderMode(mNfcInterfaceToken, (IAppCallback) null, i, (Bundle) null);
+            NfcAdapter.getDefaultAdapter(mContext).setReaderModePollingEnabled(z);
         } catch (Exception e) {
             Log.e("ReverseChargingControl", "Could not change NFC reader mode, exception: " + e);
         }

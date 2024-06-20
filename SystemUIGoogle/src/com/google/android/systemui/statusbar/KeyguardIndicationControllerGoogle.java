@@ -41,7 +41,7 @@ import com.android.keyguard.logging.KeyguardLogger;
 import com.android.settingslib.fuelgauge.BatteryStatus;
 import com.android.systemui.res.R;
 import com.android.systemui.biometrics.AuthController;
-import com.android.systemui.biometrics.FaceHelpMessageDeferral;
+import com.android.systemui.biometrics.FaceHelpMessageDeferralFactory;
 import com.android.systemui.broadcast.BroadcastDispatcher;
 import com.android.systemui.dagger.SysUISingleton;
 import com.android.systemui.dagger.qualifiers.Background;
@@ -128,7 +128,7 @@ public class KeyguardIndicationControllerGoogle extends KeyguardIndicationContro
             ScreenLifecycle screenLifecycle,
             KeyguardBypassController keyguardBypassController,
             AccessibilityManager accessibilityManager,
-            FaceHelpMessageDeferral faceHelpMessageDeferral,
+            FaceHelpMessageDeferralFactory faceHelpMessageDeferral,
             DeviceConfigProxy deviceConfigProxy,
             KeyguardLogger keyguardLogger,
             AlternateBouncerInteractor alternateBouncerInteractor,

@@ -19,6 +19,8 @@
     <string name="columbus_target_request_dialog_deny">Don’t allow</string>
     <string name="columbus_target_request_dialog_summary">Tap the back of your phone twice to open %1$s. You can change this anytime in Settings.</string>
     <string name="columbus_target_request_dialog_title">Allow Quick Tap to open %1$s?</string>
+    <string name="config_appStoreAppLinkTemplate">https://play.google.com/store/apps/details?id=$packageName</string>
+    <string name="config_appStorePackageName">com.android.vending</string>
     <string name="config_communal_settings_action">com.google.android.settings.communal.COMMUNAL_MODE_SETTINGS</string>
     <string name="config_dockComponent"/>
     <string name="config_dock_setup_account_type">com.google</string>

@@ -26,6 +26,8 @@ import android.os.Handler;
 import android.os.PowerManager;
 import android.util.Log;
 
+import com.android.systemui.dagger.qualifiers.Background;
+import com.android.systemui.dagger.qualifiers.Main;
 import com.android.systemui.broadcast.BroadcastDispatcher;
 import com.android.systemui.demomode.DemoModeController;
 import com.android.systemui.dump.DumpManager;
@@ -51,11 +53,22 @@ public class BatteryControllerImplGoogle extends BatteryControllerImpl implement
     private boolean mReverse;
     private int mRtxLevel;
 
-    public BatteryControllerImplGoogle(Context context, EnhancedEstimates enhancedEstimates, PowerManager powerManager, BroadcastDispatcher broadcastDispatcher, DemoModeController demoModeController, DumpManager dumpManager, BatteryControllerLogger logger,Handler handler, Handler handler2, UserContentResolverProvider userContentResolverProvider, ReverseChargingController reverseChargingController) {
-        super(context, enhancedEstimates, powerManager, broadcastDispatcher, demoModeController, dumpManager, logger, handler, handler2);
+    public BatteryControllerImplGoogle(
+            Context context,
+            EnhancedEstimates enhancedEstimates,
+            PowerManager powerManager,
+            BroadcastDispatcher broadcastDispatcher,
+            DemoModeController demoModeController,
+            DumpManager dumpManager,
+            BatteryControllerLogger logger,
+            @Main Handler mainHandler,
+            @Background Handler bgHandler,
+            UserContentResolverProvider userContentResolverProvider,
+            ReverseChargingController reverseChargingController) {
+        super(context, enhancedEstimates, powerManager, broadcastDispatcher, demoModeController, dumpManager, logger, mainHandler, bgHandler);
         mReverseChargingController = reverseChargingController;
         mContentResolverProvider = userContentResolverProvider;
-        mContentObserver = new ContentObserver(handler2) {
+        mContentObserver = new ContentObserver(bgHandler) {
             @Override
             public void onChange(boolean z, Uri uri) {
                 if (BatteryControllerImplGoogle.DEBUG) {

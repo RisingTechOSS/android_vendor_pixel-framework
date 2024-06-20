@@ -58,8 +58,12 @@ import com.android.systemui.statusbar.phone.CentralSurfaces;
 import com.android.systemui.statusbar.phone.CentralSurfacesImpl;
 import com.android.systemui.util.wakelock.DelayedWakeLock;
 import com.android.systemui.util.wakelock.WakeLock;
-import com.android.wm.shell.R;
+
+import com.android.systemui.res.R;
+
 import java.util.Objects;
+
+import javax.inject.Inject;
 
 public class AmbientIndicationContainer extends AutoReinflateContainer implements DozeReceiver, StatusBarStateController.StateListener, NotificationMediaManager.MediaListener {
     public Drawable mAmbientIconOverride;
@@ -75,6 +79,7 @@ public class AmbientIndicationContainer extends AutoReinflateContainer implement
     public boolean mDozing;
     public PendingIntent mFavoritingIntent;
     public final Handler mHandler;
+    public DelayedWakeLock.Factory mDelayedWakeLockFactory;
     public final Rect mIconBounds;
     public String mIconDescription;
     public int mIconOverride;
@@ -89,26 +94,31 @@ public class AmbientIndicationContainer extends AutoReinflateContainer implement
     public int mTextColor;
     public ValueAnimator mTextColorAnimator;
     public TextView mTextView;
-    public final WakeLock mWakeLock;
+    public WakeLock mWakeLock;
     public CharSequence mWirelessChargingMessage;
 
     public AmbientIndicationContainer(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         mIconBounds = new Rect();
         mIconOverride = -1;
-        Handler handler = new Handler(Looper.getMainLooper());
-        mHandler = handler;
-        mWakeLock = createWakeLock(context, handler);
+        mHandler = new Handler(Looper.getMainLooper());
         mContext = context;
     }
 
     @VisibleForTesting
-    WakeLock createWakeLock(Context context, Handler handler) {
-        return new DelayedWakeLock(handler, WakeLock.createPartial(context, null, "AmbientIndication"));
+    WakeLock createWakeLock() throws NullPointerException {
+        return mDelayedWakeLockFactory.create("AmbientIndication");
     }
 
-    public void initializeView(Context context, CentralSurfaces centralSurfaces, AmbientIndicationContainer ambientIndicationContainer) {
+    @Inject
+    public void initializeView(
+            Context context,
+            CentralSurfaces centralSurfaces,
+            AmbientIndicationContainer ambientIndicationContainer,
+            DelayedWakeLock.Factory delayedWakeLockFactory) {
         mCentralSurfaces = centralSurfaces;
+        mDelayedWakeLockFactory = delayedWakeLockFactory;
+        mWakeLock = createWakeLock();
         addInflateListener(new AutoReinflateContainer.InflateListener() {
           @Override
             public void onInflated(View view) {
@@ -358,6 +368,10 @@ public class AmbientIndicationContainer extends AutoReinflateContainer implement
     }
 
     public void updatePill() {
+        if (mWakeLock == null) {
+            return;
+        }
+
         boolean z;
         boolean z2;
         boolean z3;

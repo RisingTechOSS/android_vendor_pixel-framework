@@ -45,7 +45,10 @@ public final class ScreenshotNotificationSmartActionsProviderGoogle extends Scre
     private static final ImmutableMap SCREENSHOT_OP_STATUS_MAP = ImmutableMap.builder().put(ScreenshotNotificationSmartActionsProvider.ScreenshotOpStatus.SUCCESS, FeedbackParcelables_ScreenshotOpStatus.SUCCESS).put(ScreenshotNotificationSmartActionsProvider.ScreenshotOpStatus.ERROR, FeedbackParcelables_ScreenshotOpStatus.ERROR).put(ScreenshotNotificationSmartActionsProvider.ScreenshotOpStatus.TIMEOUT, FeedbackParcelables_ScreenshotOpStatus.TIMEOUT).build();
     private static final ImmutableMap SCREENSHOT_INTERACTION_TYPE_MAP = ImmutableMap.builder().put(ScreenshotNotificationSmartActionsProvider.ScreenshotSmartActionType.REGULAR_SMART_ACTIONS, SuggestParcelables_InteractionType.SCREENSHOT_NOTIFICATION).put(ScreenshotNotificationSmartActionsProvider.ScreenshotSmartActionType.QUICK_SHARE_ACTION, SuggestParcelables_InteractionType.QUICK_SHARE).build();
 
-    public ScreenshotNotificationSmartActionsProviderGoogle(Context context, Executor executor, Handler handler) {
+    public ScreenshotNotificationSmartActionsProviderGoogle(
+            Context context,
+            Executor executor,
+            Handler handler) {
         mClient = new ContentSuggestionsServiceClient(context, executor, handler);
     }
 

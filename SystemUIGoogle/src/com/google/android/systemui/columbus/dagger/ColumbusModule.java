@@ -46,8 +46,9 @@ import com.android.systemui.statusbar.CommandQueue;
 import com.android.systemui.statusbar.NotificationShadeWindowController;
 import com.android.systemui.statusbar.commandline.CommandRegistry;
 import com.android.systemui.statusbar.phone.StatusBarKeyguardViewManager;
+import com.android.systemui.statusbar.phone.HeadsUpManagerPhone;
+import com.android.systemui.statusbar.phone.HeadsUpModule;
 import com.android.systemui.statusbar.policy.DeviceProvisionedController;
-import com.android.systemui.statusbar.policy.HeadsUpManager;
 import com.android.systemui.statusbar.policy.KeyguardStateController;
 import com.android.systemui.telephony.TelephonyListenerManager;
 import com.android.systemui.tuner.TunerService;
@@ -103,6 +104,8 @@ import com.google.android.systemui.columbus.sensors.config.LowSensitivitySetting
 import com.google.android.systemui.columbus.sensors.config.SensorConfiguration;
 import com.google.android.systemui.statusbar.phone.CentralSurfacesGoogle;
 
+import com.google.android.systemui.statusbar.phone.dagger.StatusBarPhoneModule;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -121,7 +124,10 @@ import dagger.Module;
 import dagger.Provides;
 import dagger.multibindings.ElementsIntoSet;
 
-@Module
+@Module(includes = {
+        HeadsUpModule.class,
+        StatusBarPhoneModule.class,
+})
 public class ColumbusModule {
 
     @Provides
@@ -330,7 +336,7 @@ public class ColumbusModule {
 
     @Provides
     @SysUISingleton
-    static com.google.android.systemui.columbus.actions.UnpinNotifications provideUnpinNotificationsColumbus(Context context, SilenceAlertsDisabled silenceAlertsDisabled, Optional<HeadsUpManager> optional) {
+    static com.google.android.systemui.columbus.actions.UnpinNotifications provideUnpinNotificationsColumbus(Context context, SilenceAlertsDisabled silenceAlertsDisabled, Optional<HeadsUpManagerPhone> optional) {
         return new com.google.android.systemui.columbus.actions.UnpinNotifications(context, silenceAlertsDisabled, optional);
     }
 
@@ -342,7 +348,7 @@ public class ColumbusModule {
 
     @Provides
     @SysUISingleton
-    static LaunchApp provideLaunchApp(Context context, LauncherApps launcherApps, ActivityStarter activityStarter, StatusBarKeyguardViewManager statusBarKeyguardViewManager, IActivityManager iActivityManager, UserManager userManager, ColumbusSettings columbusSettings, KeyguardVisibility keyguardVisibility, KeyguardUpdateMonitor keyguardUpdateMonitor, @Main Handler handler, @Background Handler handlerB, Executor executor, QsEventLogger uiEventLogger, UserTracker userTracker) {
+    static LaunchApp provideLaunchApp(Context context, LauncherApps launcherApps, ActivityStarter activityStarter, StatusBarKeyguardViewManager statusBarKeyguardViewManager, IActivityManager iActivityManager, UserManager userManager, ColumbusSettings columbusSettings, KeyguardVisibility keyguardVisibility, KeyguardUpdateMonitor keyguardUpdateMonitor, @Main Handler handler, @Background Handler handlerB, @Main Executor executor, QsEventLogger uiEventLogger, UserTracker userTracker) {
         return new LaunchApp(context, launcherApps, activityStarter, statusBarKeyguardViewManager, iActivityManager, userManager, columbusSettings, keyguardVisibility, keyguardUpdateMonitor, handler, handlerB, executor, uiEventLogger, userTracker);
     }
 

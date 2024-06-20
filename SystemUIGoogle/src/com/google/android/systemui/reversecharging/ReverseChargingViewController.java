@@ -28,6 +28,7 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LifecycleRegistry;
 
+import com.android.systemui.dagger.qualifiers.Main;
 import com.android.settingslib.Utils;
 import com.android.systemui.res.R;
 import com.android.systemui.broadcast.BroadcastDispatcher;
@@ -52,7 +53,7 @@ public class ReverseChargingViewController extends BroadcastReceiver implements 
     private final Context mContext;
     private final KeyguardIndicationControllerGoogle mKeyguardIndicationController;
     private final LifecycleRegistry mLifecycle = new LifecycleRegistry(this);
-    private final Executor mMainExecutor;
+    private final @Main Executor mMainExecutor;
     private final StatusBarIconController mStatusBarIconController;
     private final Lazy<CentralSurfaces> mCentralSurfacesLazy;
     private AmbientIndicationContainer mAmbientIndicationContainer;
@@ -65,13 +66,20 @@ public class ReverseChargingViewController extends BroadcastReceiver implements 
     private String mSlotReverseCharging;
 
     @Inject
-    public ReverseChargingViewController(Context context, BatteryController batteryController, Lazy<CentralSurfaces> centralSurfacesLazy, StatusBarIconController statusBarIconController, BroadcastDispatcher broadcastDispatcher, Executor executor, KeyguardIndicationControllerGoogle keyguardIndicationControllerGoogle) {
+    public ReverseChargingViewController(
+            Context context,
+            BatteryController batteryController,
+            Lazy<CentralSurfaces> centralSurfacesLazy,
+            StatusBarIconController statusBarIconController,
+            BroadcastDispatcher broadcastDispatcher,
+            @Main Executor mainExecutor,
+            KeyguardIndicationControllerGoogle keyguardIndicationControllerGoogle) {
         mBatteryController = batteryController;
         mStatusBarIconController = statusBarIconController;
         mCentralSurfacesLazy = centralSurfacesLazy;
         mContext = context;
         mBroadcastDispatcher = broadcastDispatcher;
-        mMainExecutor = executor;
+        mMainExecutor = mainExecutor;
         mKeyguardIndicationController = keyguardIndicationControllerGoogle;
         loadStrings();
     }

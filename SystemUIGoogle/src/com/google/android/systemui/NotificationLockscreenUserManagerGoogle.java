@@ -64,8 +64,7 @@ public final class NotificationLockscreenUserManagerGoogle extends NotificationL
             Lazy<OverviewProxyService> overviewProxyServiceLazy,
             KeyguardManager keyguardManager,
             StatusBarStateController statusBarStateController,
-            @Main Handler mainHandler,
-            @Background Handler backgroundHandler,
+            @Main Executor mainExecutor,
             @Background Executor backgroundExecutor,
             DeviceProvisionedController deviceProvisionedController,
             KeyguardStateController keyguardStateController,
@@ -77,7 +76,7 @@ public final class NotificationLockscreenUserManagerGoogle extends NotificationL
             SmartSpaceController smartSpaceController) {
         super(context, broadcastDispatcher, devicePolicyManager, userManager, userTracker, visibilityProviderLazy,
             commonNotifCollectionLazy, clickNotifier, overviewProxyServiceLazy, keyguardManager, statusBarStateController,
-            mainHandler, backgroundHandler, backgroundExecutor, deviceProvisionedController, keyguardStateController, secureSettings, dumpManager, lockPatternUtils, featureFlags);
+            mainExecutor, backgroundExecutor, deviceProvisionedController, keyguardStateController, secureSettings, dumpManager, lockPatternUtils, featureFlags);
         KeyguardStateController.Callback callback = new KeyguardStateController.Callback() {
             public void onKeyguardShowingChanged() {
                 NotificationLockscreenUserManagerGoogle.this.updateSmartSpaceVisibilitySettings();
