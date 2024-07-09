@@ -21,7 +21,6 @@ android_library {
         "matchmaker-lib",
         "touchcontext-lib",
         "nga-lib",
-        "elmyra-lib",
         "columbus-lib",
         "androidx.concurrent_concurrent-futures-ktx",
     ],

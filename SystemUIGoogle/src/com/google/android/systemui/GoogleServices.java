@@ -14,9 +14,6 @@ import com.google.android.systemui.ambientmusic.AmbientIndicationService;
 import com.google.android.systemui.input.TouchContextService;
 import com.google.android.systemui.columbus.ColumbusContext;
 import com.google.android.systemui.columbus.ColumbusServiceWrapper;
-import com.google.android.systemui.elmyra.ElmyraContext;
-import com.google.android.systemui.elmyra.ElmyraService;
-import com.google.android.systemui.elmyra.ServiceConfigurationGoogle;
 
 import java.util.ArrayList;
 
@@ -30,7 +27,6 @@ public class GoogleServices extends VendorServices {
     private final CentralSurfaces mCentralSurfaces;
     private final AlarmManager mAlarmManager;
     private final QsEventLogger mUiEventLogger;
-    private final Lazy<ServiceConfigurationGoogle> mServiceConfigurationGoogle;
     private final Lazy<ColumbusServiceWrapper> mColumbusServiceLazy;
     private final DelayedWakeLock.Factory mDelayedWakeLockFactory;
 
@@ -40,7 +36,6 @@ public class GoogleServices extends VendorServices {
             AlarmManager alarmManager,
             CentralSurfaces centralSurfaces,
             QsEventLogger uiEventLogger,
-            Lazy<ServiceConfigurationGoogle> serviceConfigurationGoogleLazy,
             Lazy<ColumbusServiceWrapper> columbusServiceWrapperLazy,
             DelayedWakeLock.Factory delayedWakeLockFactory) {
         super();
@@ -49,16 +44,12 @@ public class GoogleServices extends VendorServices {
         mAlarmManager = alarmManager;
         mCentralSurfaces = centralSurfaces;
         mUiEventLogger = uiEventLogger;
-        mServiceConfigurationGoogle = serviceConfigurationGoogleLazy;
         mColumbusServiceLazy = columbusServiceWrapperLazy;
         mDelayedWakeLockFactory = delayedWakeLockFactory;
     }
 
     @Override
     public void start() {
-        if (mContext.getPackageManager().hasSystemFeature("android.hardware.context_hub") && new ElmyraContext(mContext).isAvailable()) {
-            addService(new ElmyraService(mContext, mServiceConfigurationGoogle.get(), mUiEventLogger));
-        }
         if (new ColumbusContext(mContext).isAvailable()) {
             addService(mColumbusServiceLazy.get());
         }
