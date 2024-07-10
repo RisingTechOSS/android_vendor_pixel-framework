@@ -8,6 +8,7 @@
     <bool name="config_severe_battery_dialog">true</bool>
     <bool name="config_show_low_light_clock_when_docked">false</bool>
     <bool name="config_tablet">false</bool>
+    <bool name="config_enable_elmyra_service">false</bool>
     <bool name="config_touch_context_enabled">false</bool>
     <bool name="config_wlc_support_enabled">false</bool>
     <bool name="flag_smartspace">true</bool>

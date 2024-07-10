@@ -56,7 +56,8 @@ public class GoogleServices extends VendorServices {
 
     @Override
     public void start() {
-        if (mContext.getPackageManager().hasSystemFeature("android.hardware.context_hub") && new ElmyraContext(mContext).isAvailable()) {
+        if (mContext.getPackageManager().hasSystemFeature("android.hardware.context_hub") && new ElmyraContext(mContext).isAvailable()
+            && mContext.getResources().getBoolean(R.bool.config_enable_elmyra_service)) {
             addService(new ElmyraService(mContext, mServiceConfigurationGoogle.get(), mUiEventLogger));
         }
         if (new ColumbusContext(mContext).isAvailable()) {
